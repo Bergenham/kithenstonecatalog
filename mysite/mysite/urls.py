@@ -18,11 +18,25 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
+import os
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('catalog.urls')),
+    path('catalog/', include('catalog.urls')),
+    path('', include('basic_page.urls')),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(
+    '/css/',
+    document_root=os.path.join(settings.BASE_DIR, 'basic_page/templates/basic_page/front/css')
+)
+
+urlpatterns += static(
+    '/js/',
+    document_root=os.path.join(settings.BASE_DIR, 'basic_page/templates/basic_page/front/js')
+)
+
+urlpatterns += static(
+    '/images/',
+    document_root=os.path.join(settings.BASE_DIR, 'basic_page/templates/basic_page/front/images')
+)
