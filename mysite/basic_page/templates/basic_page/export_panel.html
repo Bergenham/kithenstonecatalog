@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экспортная панель</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa, #e4e7f1);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Декоративные элементы */
+        .decor {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #e0e7ff, #d1e0ff);
+            opacity: 0.7;
+            z-index: 0;
+        }
+
+        .decor-1 {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            right: -150px;
+        }
+
+        .decor-2 {
+            width: 150px;
+            height: 150px;
+            bottom: 20px;
+            left: 50px;
+        }
+
+        .decor-3 {
+            width: 100px;
+            height: 100px;
+            top: 100px;
+            left: -50px;
+        }
+
+        .header {
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .main-title::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: rgba(59, 130, 246, 0.3);
+            z-index: -1;
+            border-radius: 4px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            letter-spacing: 1px;
+            position: relative;
+            animation: fade-in 2s forwards;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-button {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            text-decoration: none;
+            color: #1e293b;
+            font-size: 1.4rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            z-index: 1;
+        }
+
+        .card-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(to bottom, #eff6ff, #dbeafe);
+            z-index: -1;
+            transition: height 0.4s ease;
+        }
+
+        .card-button:hover::before {
+            height: 100%;
+        }
+
+        .card-button:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.15);
+            border-color: #93c5fd;
+        }
+
+        .card-button .icon {
+            width: 80px;
+            height: 80px;
+            background: #eff6ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            transition: all 0.4s ease;
+        }
+
+        .card-button:hover .icon {
+            background: #3b82f6;
+            transform: scale(1.1);
+        }
+
+        .card-button .icon i {
+            font-size: 2.5rem;
+            color: #3b82f6;
+            transition: all 0.4s ease;
+        }
+
+        .card-button:hover .icon i {
+            color: white;
+        }
+
+        .long-button {
+            grid-column: span 2;
+            padding: 30px 20px;
+            margin-top: 20px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #1e293b;
+            font-size: 1.6rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            z-index: 1;
+        }
+
+        .long-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(to bottom, #f0fdfa, #ccfbf1);
+            z-index: -1;
+            transition: height 0.4s ease;
+        }
+
+        .long-button:hover::before {
+            height: 100%;
+        }
+
+        .long-button:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.15);
+            border-color: #5eead4;
+        }
+
+        .long-button .icon {
+            width: 60px;
+            height: 60px;
+            background: #f0fdfa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            transition: all 0.4s ease;
+        }
+
+        .long-button:hover .icon {
+            background: #10b981;
+            transform: scale(1.1);
+        }
+
+        .long-button .icon i {
+            font-size: 2rem;
+            color: #10b981;
+            transition: all 0.4s ease;
+        }
+
+        .long-button:hover .icon i {
+            color: white;
+        }
+
+        /* Анимации */
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-button:nth-child(1) { animation: fade-in 0.6s forwards; }
+        .card-button:nth-child(2) { animation: fade-in 0.8s forwards; }
+        .card-button:nth-child(3) { animation: fade-in 1.0s forwards; }
+        .card-button:nth-child(4) { animation: fade-in 1.2s forwards; }
+        .long-button { animation: fade-in 1.4s forwards; }
+
+        /* Адаптивность */
+        @media (max-width: 900px) {
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .long-button {
+                grid-column: span 1;
+            }
+
+            .main-title {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .main-title {
+                font-size: 2.8rem;
+            }
+
+            .card-button, .long-button {
+                font-size: 1.2rem;
+                padding: 30px 15px;
+            }
+
+            .card-button .icon {
+                width: 70px;
+                height: 70px;
+                margin-bottom: 20px;
+            }
+
+            .long-button .icon {
+                width: 50px;
+                height: 50px;
+                margin-right: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 2.3rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Декоративные элементы -->
+        <div class="decor decor-1"></div>
+        <div class="decor decor-2"></div>
+        <div class="decor decor-3"></div>
+
+        <!-- Заголовок -->
+        <div class="header">
+            <h1 class="main-title">EXPORT PANEL</h1>
+            <p class="subtitle">В виде таблицы</p>
+        </div>
+
+        <div class="button-grid">
+            <a href="{% url 'basic_page:export_natural_view' %}" class="card-button">
+                <div class="icon">
+                    <i class="fas fa-file-export"></i>
+                </div>
+                Экспорт натурального камня
+            </a>
+
+            <a href="{% url 'basic_page:export_acrylic_view' %}" class="card-button">
+                <div class="icon">
+                    <i class="fas fa-file-export"></i>
+                </div>
+                Экспорт акрилового камня
+            </a>
+
+            <a href="{% url 'basic_page:export_quartz_view' %}" class="card-button">
+                <div class="icon">
+                    <i class="fas fa-file-export"></i>
+                </div>
+                Экспорт кварцевого камня
+            </a>
+
+            <a href="{% url 'basic_page:export_ceramics_view' %}" class="card-button">
+                <div class="icon">
+                    <i class="fas fa-file-export"></i>
+                </div>
+                Экспорт керамики
+            </a>
+
+            <a href="{% url 'basic_page:export_userbids_view' %}" class="long-button">
+                <div class="icon">
+                    <i class="fas fa-file-export"></i>
+                </div>
+                Экспорт заявок
+            </a>
+        </div>
+    </div>
+</body>
+</html>

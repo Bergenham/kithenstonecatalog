@@ -1,0 +1,213 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница не найдена | Maker Stone</title>
+    <meta name="description" content="Запрошенная страница не найдена. Компания Maker Stone - производство изделий из камня для интерьеров">
+    <link rel="shortcut icon" href="images/tildafavicon.ico" type="image/x-icon">
+    <!-- Все стили из исходного файла -->
+    <link rel="stylesheet" href="css/tilda-grid-3.0.min.css" type="text/css" media="all" onerror="this.loaderr='y';">
+    <link rel="stylesheet" href="css/tilda-blocks-page47146193.min.css" type="text/css" media="all" onerror="this.loaderr='y';">
+    <link rel="stylesheet" href="css/tilda-animation-2.0.min.css" type="text/css" media="all" onerror="this.loaderr='y';">
+    <link rel="stylesheet" href="css/tilda-popup-1.1.min.css" type="text/css" media="print" onload="this.media='all';" onerror="this.loaderr='y';">
+    <link rel="stylesheet" href="css/tilda-slds-1.4.min.css" type="text/css" media="print" onload="this.media='all';" onerror="this.loaderr='y';">
+    <link rel="stylesheet" href="css/tilda-catalog-1.1.min.css" type="text/css" media="print" onload="this.media='all';" onerror="this.loaderr='y';">
+    <link rel="stylesheet" href="css/tilda-forms-1.0.min.css" type="text/css" media="all" onerror="this.loaderr='y';">
+    <link rel="stylesheet" href="css/tilda-cart-1.0.min.css" type="text/css" media="all" onerror="this.loaderr='y';">
+    <link rel="stylesheet" href="css/tilda-menusub-1.0.min.css" type="text/css" media="print" onload="this.media='all';" onerror="this.loaderr='y';">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Exo2:wght@100;200;300;400;500;600;700;800;900" type="text/css">
+
+    <style>
+        /* Стили для страницы 404 */
+        .error-page {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .error-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .error-code {
+            font-size: 160px;
+            font-weight: 800;
+            line-height: 1;
+            color: #7ec047;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 0 rgba(126, 192, 71, 0.1);
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .error-title {
+            font-size: 40px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .error-text {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 16px 40px;
+            background-color: #7ec047;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 2px solid #7ec047;
+            font-family: 'Exo 2', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .home-button:hover {
+            background-color: transparent;
+            color: #7ec047;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(126, 192, 71, 0.2);
+        }
+
+        .marble-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0.05;
+            z-index: 1;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0 0h100v100H0z" fill="none"/><path d="M20 20h60v60H20z" fill="%237ec047" opacity="0.2"/></svg>');
+            background-size: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 120px;
+            }
+            .error-title {
+                font-size: 32px;
+            }
+            .error-text {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .error-code {
+                font-size: 80px;
+            }
+            .error-title {
+                font-size: 24px;
+            }
+        }
+
+        /* Анимации */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .error-code {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="t-body" style="margin:0;">
+<div id="allrecords" class="t-records" data-hook="blocks-collection-content-node" data-tilda-project-id="8811365"
+     data-tilda-page-id="47146193" data-tilda-page-alias="catalog"
+     data-tilda-formskey="0fcc8583039c1abb3ecdaa9168811365" data-tilda-cookie="no" data-tilda-lazy="yes"
+     data-tilda-root-zone="com">
+
+    <!-- Header (без изменений) -->
+    <header id="t-header" class="t-records" data-hook="blocks-collection-content-node" data-tilda-project-id="8811365"
+            data-tilda-page-id="47146033" data-tilda-page-alias="menu"
+            data-tilda-formskey="0fcc8583039c1abb3ecdaa9168811365" data-tilda-cookie="no" data-tilda-lazy="yes"
+            data-tilda-root-zone="com">
+        <!-- ... исходный код хедера ... -->
+    </header>
+
+    <!-- Контент страницы 404 -->
+    <div id="rec734099999" class="r t-rec t-rec_pt_0 t-rec_pb_0" style="padding-top:0px;padding-bottom:0px;">
+        <div class="error-page">
+            <div class="marble-pattern"></div>
+            <div class="error-content">
+                <div class="error-code">404</div>
+                <h1 class="error-title">Страница не найдена</h1>
+                <p class="error-text">К сожалению, запрошенная вами страница не существует. Возможно, она была перемещена или вы неверно указали адрес.</p>
+                <a href="/" class="home-button">Вернуться на главную</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer (без изменений) -->
+    <footer id="t-footer" class="t-records" data-hook="blocks-collection-content-node"
+            data-tilda-project-id="8811365"
+            data-tilda-page-id="47146035" data-tilda-formskey="0fcc8583039c1abb3ecdaa9168811365"
+            data-tilda-cookie="no"
+            data-tilda-lazy="yes" data-tilda-root-zone="com">
+        <!-- ... исходный код футера ... -->
+    </footer>
+
+    <!-- Все скрипты из исходного файла -->
+    <script src="js/tilda-fallback-1.0.min.js" async="" charset="utf-8"></script>
+    <script src="js/jquery-1.10.2.min.js" charset="utf-8" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-scripts-3.0.min.js" charset="utf-8" defer="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-blocks-page47146193.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-lazyload-1.0.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-animation-2.0.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-zero-1.1.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/hammer.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-slds-1.4.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-products-1.0.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-catalog-1.1.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-forms-1.0.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-cart-1.0.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-widget-positions-1.0.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-menusub-1.0.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-menu-1.0.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-zero-scale-1.0.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-skiplink-1.0.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+    <script src="js/tilda-events-1.0.min.js" charset="utf-8" async="" onerror="this.loaderr='y';"></script>
+
+    <script>
+        // Инициализация необходимых компонентов
+        t_onReady(function() {
+            // Инициализация меню
+            t_onFuncLoad('t_menu__setBGcolor', function() {
+                t_menu__setBGcolor('734095395','.t228');
+            });
+
+            // Инициализация мобильного меню
+            t_onFuncLoad('t451_initMenu', function() {
+                t451_initMenu('734095396');
+            });
+        });
+    </script>
+</div>
+</body>
+</html>
