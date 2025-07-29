@@ -6,7 +6,7 @@
   </component>
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="true" />
+    <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DatabaseAssistantManager">
@@ -37,7 +37,12 @@
     <connection id="bdbcbc1c-e316-4818-9874-10dc822ca539" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="bdbcbc1c-e316-4818-9874-10dc822ca539" dataset="public.catalog_quartzstone" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="bdbcbc1c-e316-4818-9874-10dc822ca539" dataset="public.catalog_naturalstone" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="bdbcbc1c-e316-4818-9874-10dc822ca539" dataset="public.catalog_stone" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="bdbcbc1c-e316-4818-9874-10dc822ca539" dataset="public.basic_page_userbidmodel" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="bdbcbc1c-e316-4818-9874-10dc822ca539" dataset="public.django_admin_log" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="bdbcbc1c-e316-4818-9874-10dc822ca539" dataset="public.catalog_stoneimage" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />

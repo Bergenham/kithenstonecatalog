@@ -4,6 +4,16 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
 
+def get_upload_path(instance, filename):
+    material_folders = {
+        'Кварцевый камень': 'quartz',
+        'Акриловый камень': 'acrylic',
+        'Натуральный камень': 'natural',
+        'Керамический камень': 'ceramics'
+    }
+    folder = material_folders.get(instance.material, 'other')
+    return f'stones/{folder}/previews/{filename}'
+
 class Stone(models.Model):
     class MaterialChoices(models.TextChoices):
         QUARTZ = 'Кварцевый камень', 'Кварцевый камень'
@@ -12,7 +22,8 @@ class Stone(models.Model):
         CERAMIC = 'Керамический камень', 'Керамический камень'
 
     class CountryChoices(models.TextChoices):
-        QUARTZ =  'Кварцевый камень', 'Кварцевый камень'
+        CZECH = 'Чехия', 'Чехия'
+        ISRAEL = 'Израиль', 'Израиль'
 
     name_stone = models.CharField(
         max_length=50,
@@ -31,7 +42,7 @@ class Stone(models.Model):
     )
 
     priview_img = models.ImageField(
-        upload_to='stones/previews/',
+        upload_to=get_upload_path,
         verbose_name='Превью изображение'
     )
 
@@ -52,10 +63,9 @@ class Stone(models.Model):
         verbose_name='Толщина (мм)'
     )
 
-    article = models.PositiveIntegerField(unique=True, verbose_name='Артикул')
+    article = models.CharField(max_length=100 ,unique=True, verbose_name='Артикул')
     about_brand = models.TextField(verbose_name='О бренде')
     archive = models.BooleanField(default=False, verbose_name='В архиве')
-
 
     def __str__(self):
         return self.name_stone
@@ -107,8 +117,8 @@ class QuartzStone(Stone):
         POLISHED =  'Полированная', 'Полированная'
 
     class LinkSerfChoices(models.TextChoices):
-        Q_CERT = 'q_cert.pdf', '#'
-        Q_SAFETY = 'q_safe.pdf', '#'
+        CAESARSTONE  = 'https://drive.google.com/drive/folders/1YgXlFi8KKDzPHz5IheKJlbepOqd1sl3M', 'Caesarstone'
+        TECHNISTONE  = 'https://technistone.ru/info/certificates/', 'Technistone'
 
     brand_stone = models.CharField(
         max_length=50,
@@ -131,7 +141,6 @@ class QuartzStone(Stone):
         verbose_name='Фактура'
     )
     link_serf = models.CharField(
-        max_length=50,
         choices=LinkSerfChoices.choices,
         verbose_name='Ссылка на сертификаты'
     )

@@ -1811,9 +1811,18 @@
                     <i class="fas fa-plus accordion-icon"></i>
                 </div>
                 <div class="accordion-content">
-                    <p>Из кварцевого камня Caesarstone можно изготовить широкий спектр изделий: кухонные столешницы,
-                        барные стойки, подоконники, столешницы для ванных комнат, облицовку стен и полов, а также
-                        мебельные элементы. Камень отлично подходит как для жилых, так и для коммерческих помещений.</p>
+                    <p>
+                    <h5>Из данного камня можно изготовить любые изделия для вашего интерьера:</h5>
+                        <br>
+                        <li>Cтолешницы и остров для кухни;</li>
+                        <li>Cтолешницы для санузлов;</li>
+                        <li>Cтеновые панели, фартуки и плинтусы;</li>
+                        <li>Подоконники;</li>
+                        <li>Cтупени и лестницы;</li>
+                        <li>Камины;</li>
+                        <li>Барные стойки и многое другое;</li>
+
+                    </p>
                 </div>
             </div>
 
@@ -1823,14 +1832,11 @@
                     <i class="fas fa-plus accordion-icon"></i>
                 </div>
                 <div class="accordion-content">
-                    <p>Производитель Caesarstone предоставляет гарантию на сам камень сроком 15 лет при условии
-                        правильной установки и эксплуатации. На готовые изделия (столешницы, подоконники и т.д.)
-                        гарантия предоставляется компанией-изготовителем и обычно составляет 2-5 лет в зависимости от
-                        сложности изделия и условий эксплуатации.</p>
+                    <p>Поставщик кварцевого камня предоставляет гарантию на камень, а мы, как производитель, гарантируем качество изготовленных и установленных нашей компанией изделий</p>
                 </div>
             </div>
         </div>
-        <a style="text-decoration: none;" href="#">
+        <a style="text-decoration: none;" href="{{ stone.link_serf }}">
             <button class="download-btn">
                 <i class="fas fa-download"></i> Скачать сертификаты
             </button>
@@ -1842,13 +1848,20 @@
 <div>
     <footer class="ms-footer">
         <div class="ms-footer-content">
-            <div class="ms-footer-section"><a href="{% url 'basic_page:media' %}" style="text-decoration: none; color: inherit;">Медиа</a></div>
-            <div class="ms-footer-section"><a href="{% url 'basic_page:calculator' %}" style="text-decoration: none; color: inherit;">Калькулятор</a></div>
-            <div class="ms-footer-section"><a href="{% url 'basic_page:calculator' %}" style="text-decoration: none; color: inherit;">Контакты</a></div>
-            <div class="ms-footer-section"><a href="{% url 'basic_page:politic_conf' %}" style="text-decoration: none; color: inherit;">Политика конфиденциальности</a></div>
+            <div class="ms-footer-section"><a href="{% url 'basic_page:media' %}"
+                                              style="text-decoration: none; color: inherit;">Медиа</a></div>
+            <div class="ms-footer-section"><a href="{% url 'basic_page:calculator' %}"
+                                              style="text-decoration: none; color: inherit;">Калькулятор</a></div>
+            <div class="ms-footer-section"><a href="{% url 'basic_page:calculator' %}"
+                                              style="text-decoration: none; color: inherit;">Контакты</a></div>
+            <div class="ms-footer-section"><a href="{% url 'basic_page:politic_conf' %}"
+                                              style="text-decoration: none; color: inherit;">Политика
+                конфиденциальности</a></div>
         </div>
         <div class="ms-footer-copyright">
-                       <div class="ms-footer-section"><a href="{% url 'basic_page:main_page' %}" style="text-decoration: none; color: inherit;">© 2017-2025, MAKER STONE</a></div>
+            <div class="ms-footer-section"><a href="{% url 'basic_page:main_page' %}"
+                                              style="text-decoration: none; color: inherit;">© 2017-2025, MAKER
+                STONE</a></div>
         </div>
     </footer>
 </div>
