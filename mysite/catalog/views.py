@@ -12,7 +12,7 @@ def custom_404_view(request, exception):
 def stone_detail_q(request, stone_id=None):
     if stone_id:
         stone = get_object_or_404(QuartzStone, pk=stone_id)
-        images = StoneImage.objects.filter(stone=stone).all()
+        images = StoneImage.objects.filter(stone=stone, archive=False).all()
     else:
         return redirect(reverse("basic_page:main"))
 
@@ -47,7 +47,7 @@ def stone_detail_q(request, stone_id=None):
 def stone_detail_c(request, stone_id=None):
     if stone_id:
         stone = get_object_or_404(CeramicsStone, pk=stone_id)
-        images = StoneImage.objects.filter(stone=stone).all()
+        images = StoneImage.objects.filter(stone=stone, archive=False).all()
     else:
         return redirect(reverse("basic_page:main"))
 
@@ -82,7 +82,7 @@ def stone_detail_c(request, stone_id=None):
 def stone_detail_a(request, stone_id=None):
     if stone_id:
         stone = get_object_or_404(AcrylicStone, pk=stone_id)
-        images = StoneImage.objects.filter(stone=stone).all()
+        images = StoneImage.objects.filter(stone=stone, archive=False).all()
     else:
         return redirect(reverse("basic_page:main"))
 
@@ -117,7 +117,7 @@ def stone_detail_a(request, stone_id=None):
 def stone_detail_n(request, stone_id=None):
     if stone_id:
         stone = get_object_or_404(NaturalStone, pk=stone_id)
-        images = StoneImage.objects.filter(stone=stone).all()
+        images = StoneImage.objects.filter(stone=stone, archive=False).all()
     else:
         return redirect(reverse("basic_page:main"))
 
@@ -155,7 +155,7 @@ class QuartzCatalog(ListView):
     ordering = ['name_stone']
 
     def get_queryset(self):
-        queryset = QuartzStone.objects.only(
+        queryset = QuartzStone.objects.filter(archive=False).only(
             'name_stone',
             'priview_img',
             'brand_stone',
@@ -201,7 +201,7 @@ class CeramicCatalog(ListView):
     ordering = ['name_stone']
 
     def get_queryset(self):
-        queryset = CeramicsStone.objects.only(
+        queryset = CeramicsStone.objects.filter(archive=False).only(
             'name_stone',
             'priview_img',
             'brand_stone',
@@ -247,7 +247,7 @@ class NaturalCatalog(ListView):
     ordering = ['name_stone']
 
     def get_queryset(self):
-        queryset = NaturalStone.objects.only(
+        queryset = NaturalStone.objects.filter(archive=False).only(
             'name_stone',
             'priview_img',
             'brand_stone',
@@ -293,7 +293,7 @@ class AcrilCatalog(ListView):
     ordering = ['name_stone']
 
     def get_queryset(self):
-        queryset = AcrylicStone.objects.only(
+        queryset = AcrylicStone.objects.filter(archive=False).only(
             'name_stone',
             'priview_img',
             'brand_stone',

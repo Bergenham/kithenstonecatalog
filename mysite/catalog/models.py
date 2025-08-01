@@ -94,8 +94,8 @@ class StoneImage(models.Model):
 
 class QuartzStone(Stone):
     class BrandStoneChoices(models.TextChoices):
-        CAESARSTONE = 'caesarstone'
-        TECHNISTONE = 'technistone'
+        CAESARSTONE = 'Caesarstone'
+        TECHNISTONE = 'Technistone'
 
 
     class ColorChoices(models.TextChoices):

@@ -20,7 +20,7 @@ class StoneImageInline(admin.TabularInline):
     image_preview.short_description = "Примеры"
 
 class StoneAdminBase(admin.ModelAdmin):
-    list_display = ('name_stone', 'article', 'material', 'country', 'archive', 'preview_thumbnail')
+    list_display = ('name_stone', 'pk', 'article', 'material', 'country', 'archive', 'preview_thumbnail')
     list_filter = ('material', 'country', 'archive')
     search_fields = ('name_stone', 'article', 'about_brand')
     list_editable = ('archive',)

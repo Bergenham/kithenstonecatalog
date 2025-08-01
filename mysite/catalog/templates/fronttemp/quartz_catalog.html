@@ -1175,110 +1175,71 @@ rec.setAttribute('data-animationappear','off');rec.style.opacity=1;t_onFuncLoad(
     </div>
     <div class="filter-content" id="filterContent">
         <div class="filter-category">
-            <div class="filter-title" id="brand-title">
-                Бренд
-                <span class="filter-count">0</span>
-            </div>
-            <div class="filter-options">
-                <label class="filter-option">
-                    <input type="checkbox" name="brand" value="caesarstone">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Caesarstone</span>
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" name="brand" value="technistone">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Technistone</span>
-                </label>
-            </div>
-        </div>
+    <div class="filter-title" id="brand-title">
+        Бренд
+        <span class="filter-count">0</span>
+    </div>
+    <div class="filter-options">
+        {% for value, label in brand_choices %}
+        <label class="filter-option">
+            <input type="checkbox" name="brand" value="{{ value }}">
+            <span class="custom-checkbox"></span>
+            <span class="option-text">{{ label }}</span>
+        </label>
+        {% endfor %}
+    </div>
+</div>
 
-        <div class="filter-category">
-            <div class="filter-title" id="color-title">
-                Цвет
-                <span class="filter-count">0</span>
-            </div>
-            <div class="filter-options">
-                <label class="filter-option">
-                    <input type="checkbox" name="color" value="beige">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Бежевый</span>
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" name="color" value="white">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Белый</span>
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" name="color" value="brown">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Коричневый</span>
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" name="color" value="grey">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Серый</span>
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" name="color" value="dark-grey">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Темно-серый</span>
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" name="color" value="black">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Черный</span>
-                </label>
-            </div>
-        </div>
+<!-- Цвет -->
+<div class="filter-category">
+    <div class="filter-title" id="color-title">
+        Цвет
+        <span class="filter-count">0</span>
+    </div>
+    <div class="filter-options">
+        {% for value, label in color_choices %}
+        <label class="filter-option">
+            <input type="checkbox" name="color" value="{{ value }}">
+            <span class="custom-checkbox"></span>
+            <span class="option-text">{{ label }}</span>
+        </label>
+        {% endfor %}
+    </div>
+</div>
 
-        <div class="filter-category">
-            <div class="filter-title" id="faktura-title">
-                Фактура
-                <span class="filter-count">0</span>
-            </div>
-            <div class="filter-options">
-                <label class="filter-option">
-                    <input type="checkbox" name="faktura" value="honed">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Матовая</span>
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" name="faktura" value="polished">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Полированная</span>
-                </label>
-            </div>
-        </div>
+<!-- Фактура -->
+<div class="filter-category">
+    <div class="filter-title" id="faktura-title">
+        Фактура
+        <span class="filter-count">0</span>
+    </div>
+    <div class="filter-options">
+        {% for value, label in faktura_choices %}
+        <label class="filter-option">
+            <input type="checkbox" name="faktura" value="{{ value }}">
+            <span class="custom-checkbox"></span>
+            <span class="option-text">{{ label }}</span>
+        </label>
+        {% endfor %}
+    </div>
+</div>
 
-        <div class="filter-category">
-            <div class="filter-title" id="texture-title">
-                Текстура
-                <span class="filter-count">0</span>
-            </div>
-            <div class="filter-options">
-                <label class="filter-option">
-                    <input type="checkbox" name="texture" value="Concrete">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Бетон</span>
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" name="texture" value="Marble">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Мраморная</span>
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" name="texture" value="Single-color">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Однотонная</span>
-                </label>
-                <label class="filter-option">
-                    <input type="checkbox" name="texture" value="Terrazzo">
-                    <span class="custom-checkbox"></span>
-                    <span class="option-text">Тераццо</span>
-                </label>
-            </div>
-        </div>
+<!-- Текстура -->
+<div class="filter-category">
+    <div class="filter-title" id="texture-title">
+        Текстура
+        <span class="filter-count">0</span>
+    </div>
+    <div class="filter-options">
+        {% for value, label in texture_choices %}
+        <label class="filter-option">
+            <input type="checkbox" name="texture" value="{{ value }}">
+            <span class="custom-checkbox"></span>
+            <span class="option-text">{{ label }}</span>
+        </label>
+        {% endfor %}
+    </div>
+</div>
     </div>
 </div>
 
