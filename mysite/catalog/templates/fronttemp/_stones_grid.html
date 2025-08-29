@@ -1,0 +1,20 @@
+<div class="catalog-grid">
+    {% if stones %}
+        {% for stone in stones %}
+        <a href="{% url 'catalog:stone_detail_q' stone_id=stone.pk %}">
+            <div class="stone-card">
+                <div class="image-wrapper">
+                    <img src="{{ stone.priview_img.url }}"
+                         alt="{{ stone.name_stone }}"
+                         class="stone-image"
+                         width="600"
+                         height="600">
+                </div>
+                <div class="stone-name"><b>{{ stone.name_stone }}</b></div>
+            </div>
+        </a>
+        {% endfor %}
+    {% else %}
+        <div class="no-results">Ничего не найдено по выбранным фильтрам.</div>
+    {% endif %}
+</div>
