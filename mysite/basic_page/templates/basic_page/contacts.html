@@ -1,0 +1,2415 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты | Maker Stone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.css">
+    <style>
+        :root {
+            --primary-color: #59885d;
+            --primary-light: #6fa074;
+            --text-color: #686868;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Заглушка для header */
+        #header-placeholder {
+            background: linear-gradient(135deg, var(--dark-bg), #4a6491);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        /* Основной контент */
+        .product-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Верхняя секция с названием и ценой */
+        .product-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            gap: 20px;
+            position: relative;
+        }
+
+        .product-title {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .product-title h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            color: #333;
+            letter-spacing: 1px;
+            display: block;
+            position: relative;
+        }
+
+        .price-block {
+            margin-top: 10px;
+        }
+
+        .product-price {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+            position: relative;
+        }
+
+        .product-unit {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .contact-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(89, 136, 93, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .contact-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.6s;
+            z-index: -1;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(89, 136, 93, 0.4);
+            background-color: var(--primary-light);
+        }
+
+        .contact-btn:hover::before {
+            left: 100%;
+        }
+
+        .contact-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Галерея изображений */
+        .gallery-section {
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .gallery-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #444;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .gallery-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .swiper {
+            width: 100%;
+            height: 550px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.5s ease;
+        }
+
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .swiper-slide:hover img {
+            transform: scale(1.03);
+        }
+
+        .swiper-button-prev, .swiper-button-next {
+            color: white;
+            background: rgba(0,0,0,0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: var(--transition);
+            backdrop-filter: blur(2px);
+        }
+
+        .swiper-button-prev::after, .swiper-button-next::after {
+            font-size: 1.2rem;
+        }
+
+        .swiper-button-prev:hover, .swiper-button-next:hover {
+            background: rgba(89, 136, 93, 0.8);
+            transform: scale(1.1);
+        }
+
+        .swiper-pagination-bullet {
+            width: 12px;
+            height: 12px;
+            background: rgba(255,255,255,0.5);
+            opacity: 1;
+            transition: var(--transition);
+        }
+
+        .swiper-pagination-bullet-active {
+            background: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        /* Детальная информация */
+        .details-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 50px;
+            margin-bottom: 60px;
+            background: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1000') no-repeat center center;
+            background-size: cover;
+            padding: 40px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .details-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.92);
+            z-index: 1;
+        }
+
+        .product-image {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-image img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: var(--transition);
+        }
+
+        .product-image img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .product-info {
+            flex: 2;
+            min-width: 300px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .product-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #333;
+            position: relative;
+            display: inline-block;
+        }
+
+        .product-info h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 70px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .info-item {
+            margin-bottom: 20px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            padding-left: 32px;
+            color: var(--text-color);
+        }
+
+        /* Форма обратной связи */
+        .form-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #eef2f6 100%);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+            margin-bottom: 60px;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(89,136,93,0.03) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+            animation: pulse 8s infinite;
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            color: #333;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            padding-left: 5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 24px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            transition: var(--transition);
+            background: white;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(89, 136, 93, 0.2), inset 0 1px 3px rgba(0,0,0,0.05);
+            outline: none;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .custom-checkbox {
+            position: relative;
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            transition: var(--transition);
+            cursor: pointer;
+            margin-top: 3px;
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + .custom-checkbox {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(89, 136, 93, 0.3);
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + .custom-checkbox::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-container label {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.5;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 6px 20px rgba(89, 136, 93, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.6s;
+            z-index: -1;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(89, 136, 93, 0.5);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Анимация успешной отправки */
+        .success-message {
+            text-align: center;
+            padding: 50px 30px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            border-radius: 20px;
+            margin-top: 20px;
+            display: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(89, 136, 93, 0.5);
+        }
+
+        .success-message::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .success-icon {
+            position: relative;
+            z-index: 1;
+            font-size: 4rem;
+            margin-bottom: 25px;
+        }
+
+        .success-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .success-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        /* Аккордеон */
+        .accordion-section {
+            margin-bottom: 60px;
+        }
+
+        .accordion-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            color: #333;
+            position: relative;
+        }
+
+        .accordion-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .accordion-container {
+            max-width: 65%;
+            margin: 0 auto;
+        }
+
+        .accordion-item {
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .accordion-item:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+        }
+
+        .accordion-header {
+            background: white;
+            padding: 22px 25px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #444;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .accordion-header:hover {
+            background: #f8f9fa;
+        }
+
+        .accordion-icon {
+            font-size: 1.2rem;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(45deg);
+            color: var(--primary-color);
+        }
+
+        .accordion-content {
+            background: white;
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), padding 0.4s ease;
+        }
+
+        .accordion-item.active .accordion-content {
+            padding: 0 25px 25px;
+            max-height: 1000px;
+        }
+
+        .accordion-content p {
+            margin-bottom: 20px;
+            line-height: 1.7;
+            color: var(--text-color);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
+        }
+
+        .accordion-item.active .accordion-content p {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: block;
+            margin: 40px auto 0;
+            width: fit-content;
+            box-shadow: 0 5px 20px rgba(89, 136, 93, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.6s;
+            z-index: -1;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(89, 136, 93, 0.5);
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Заглушка для footer */
+        #footer-placeholder {
+            background: linear-gradient(135deg, var(--dark-bg), #4a6491);
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        /* Анимации */
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1200px) {
+            .accordion-container {
+                max-width: 80%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .product-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .contact-btn {
+                margin-top: 20px;
+            }
+
+            .product-title h1 {
+                font-size: 2.4rem;
+            }
+
+            .swiper {
+                height: 450px;
+            }
+
+            .details-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .product-info h1::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-value {
+                padding-left: 0;
+            }
+
+            .accordion-container {
+                max-width: 90%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .swiper {
+                height: 350px;
+            }
+
+            .form-section {
+                padding: 30px 20px;
+            }
+
+            .product-title h1 {
+                font-size: 2rem;
+            }
+
+            .product-price {
+                font-size: 1.8rem;
+            }
+
+            .product-info h1 {
+                font-size: 2rem;
+            }
+
+            .accordion-header {
+                padding: 18px 20px;
+                font-size: 1.1rem;
+            }
+
+            .accordion-container {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .swiper {
+                height: 280px;
+            }
+
+            .product-container {
+                padding: 20px 15px;
+            }
+
+            .details-section {
+                padding: 25px 15px;
+            }
+
+            .contact-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .form-section {
+                padding: 25px 15px;
+            }
+
+            .success-message {
+                padding: 30px 15px;
+            }
+        }
+                * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            padding-top: 80px; /* Отступ для контента под header */
+            background: linear-gradient(135deg, #f5f7fa, #e4efe9);
+            min-height: 100vh;
+            transition: padding-top 0.3s ease;
+        }
+
+        /* Стили для Header */
+        .header {
+            background-color: rgba(255, 255, 255, 0.0);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            padding: 0 30px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .logo {
+            height: 60px;
+            width: 200px;
+            background: linear-gradient(45deg, #2c3e50, #4a6582);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            padding: 0 15px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            height: 100%;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .nav-item {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #686868;
+            font-weight: 400;
+            padding: 0 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            position: relative;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: "▼";
+            font-size: 8px;
+            margin-left: 8px;
+            color: #9e9e9e;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #59885d;
+        }
+
+        .nav-link:hover::after {
+            color: #59885d;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            min-width: 250px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            z-index: 1;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        .dropdown-content::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            transform: rotate(45deg);
+            z-index: -1;
+            box-shadow: -3px -3px 5px rgba(0, 0, 0, 0.03);
+        }
+
+        .nav-item:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-content h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #59885d;
+        }
+
+        .dropdown-content ul {
+            list-style: none;
+        }
+
+        .dropdown-content li {
+            padding: 8px 0;
+        }
+
+        .dropdown-content a {
+            color: #686868;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        .dropdown-content a::before {
+            content: "•";
+            color: #59885d;
+            margin-right: 10px;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            color: #59885d;
+            padding-left: 5px;
+        }
+
+        .dropdown-content a:hover::before {
+            transform: scale(1.3);
+        }
+
+        .icons-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background-color: #000;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .icon i {
+            font-size: 16px;
+        }
+
+        .icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .vk:hover { background-color: #4a76a8; }
+        .whatsapp:hover { background-color: #25D366; }
+        .phone:hover { background-color: #3498db; }
+        .email:hover { background-color: #d44638; }
+
+        .btn-measure {
+            background-color: white;
+            color: #333;
+            border: 2px solid #59885d;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-left: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-measure:hover {
+            background-color: #59885d;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(89, 136, 93, 0.3);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #686868;
+            padding: 10px;
+        }
+
+        /* Мобильное меню */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 999;
+            padding: 20px;
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+        }
+
+        .mobile-menu.active {
+            display: block;
+            transform: translateX(0);
+        }
+
+        .mobile-nav {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .mobile-nav-item {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .mobile-nav-link {
+            display: block;
+            padding: 15px 10px;
+            color: #686868;
+            text-decoration: none;
+            font-weight: 400;
+            text-transform: uppercase;
+            font-size: 15px;
+            position: relative;
+        }
+
+        .mobile-nav-link::after {
+            content: "▼";
+            font-size: 10px;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9e9e9e;
+        }
+
+        .mobile-dropdown-content {
+            padding: 10px 0 10px 20px;
+            display: none;
+        }
+
+        .mobile-dropdown-content.active {
+            display: block;
+        }
+
+        .mobile-dropdown-content a {
+            display: block;
+            padding: 10px 0;
+            color: #686868;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .mobile-dropdown-content a:hover {
+            color: #59885d;
+        }
+
+        .mobile-icons-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0 20px;
+            gap: 15px;
+        }
+
+        .mobile-btn-measure {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background-color: white;
+            color: #333;
+            border: 2px solid #59885d;
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .mobile-btn-measure:hover {
+            background-color: #59885d;
+            color: white;
+        }
+
+        /* Адаптация под разные устройства */
+        @media (max-width: 1200px) {
+            .nav-menu {
+                margin: 0 10px;
+            }
+
+            .nav-link {
+                padding: 0 15px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .header {
+                padding: 0 20px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .icons-container {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            body {
+                padding-top: 80px; /* Сохраняем отступ для мобильных */
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                height: 50px;
+                width: 160px;
+                font-size: 16px;
+            }
+
+            .mobile-menu {
+                padding: 15px;
+            }
+
+            body {
+                padding-top: 80px; /* Сохраняем отступ для маленьких экранов */
+            }
+        }
+
+        /* Контент страницы */
+        .page-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .content-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .content-section p {
+            color: #686868;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        /* Демонстрационные карточки */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .feature:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature i {
+            font-size: 50px;
+            color: #59885d;
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .feature p {
+            color: #686868;
+            font-size: 16px;
+        }
+        .ms-footer {
+    color: #686868;
+    font-family: Arial, sans-serif;
+    padding: 40px 0 20px;
+    margin-top: 60px; /* Автоматический отступ от основного контента */
+    position: relative;
+    width: 100%;
+}
+
+.ms-footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 5%;
+    right: 5%;
+    border-top: 1px solid #e0e0e0;
+}
+
+.ms-footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto 30px;
+    padding: 0 20px;
+}
+
+.ms-footer-section {
+    text-align: center;
+    min-width: 120px;
+}
+
+.ms-footer-copyright {
+    text-align: center;
+    font-size: 14px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    margin: 0 20px;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    .ms-footer-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+    }
+
+    .ms-footer {
+        padding: 30px 0 15px;
+        margin-top: 40px;
+    }
+
+    .ms-footer-section {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .ms-footer-content {
+        gap: 20px;
+    }
+
+    .ms-footer-copyright {
+        font-size: 12px;
+    }
+}
+.navs-link {
+    text-decoration: none;
+    color: #686868;
+    font-weight: 400;
+    padding: 12px 25px;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    font-size: 15px;
+    letter-spacing: 0.8px;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+        :root {
+            --primary-color: #59885d;
+            --primary-light: #6fa074;
+            --text-color: #686868;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: var(--text-color);
+            background: linear-gradient(135deg, #f5f7fa, #e4efe9);
+            min-height: 100vh;
+            padding-top: 80px;
+            transition: padding-top 0.3s ease;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Контактная страница */
+        .contact-page {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .page-title h1 {
+            font-size: 2.8rem;
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #777;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Контактные иконки */
+        .contact-icons-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            transition: var(--transition);
+            padding: 30px;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .contact-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .icon-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .icon-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-item:hover .icon-circle {
+            transform: scale(1.05);
+        }
+
+        .icon-circle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .contact-item:hover .icon-circle::before {
+            opacity: 1;
+        }
+
+        .icon-circle i {
+            color: white;
+            font-size: 60px;
+            transition: var(--transition);
+        }
+
+        .contact-label {
+            text-align: center;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        /* Цвета при наведении */
+        .contact-item.vk:hover .icon-circle {
+            background: #4a76a8;
+            box-shadow: 0 0 30px rgba(74, 118, 168, 0.4);
+        }
+
+        .contact-item.whatsapp:hover .icon-circle {
+            background: #25D366;
+            box-shadow: 0 0 30px rgba(37, 211, 102, 0.4);
+        }
+
+        .contact-item.phone:hover .icon-circle {
+            background: #3498db;
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.4);
+        }
+
+        .contact-item.email:hover .icon-circle {
+            background: #d44638;
+            box-shadow: 0 0 30px rgba(212, 70, 56, 0.4);
+        }
+
+        /* Форма обратной связи */
+        .form-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #eef2f6 100%);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+            margin-bottom: 60px;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(89,136,93,0.03) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+            animation: pulse 8s infinite;
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            color: #333;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .form-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            padding-left: 5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 24px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            transition: var(--transition);
+            background: white;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(89, 136, 93, 0.2), inset 0 1px 3px rgba(0,0,0,0.05);
+            outline: none;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .custom-checkbox {
+            position: relative;
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            transition: var(--transition);
+            cursor: pointer;
+            margin-top: 3px;
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + .custom-checkbox {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(89, 136, 93, 0.3);
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + .custom-checkbox::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-container label {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.5;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 6px 20px rgba(89, 136, 93, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.6s;
+            z-index: -1;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(89, 136, 93, 0.5);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Анимация успешной отправки */
+        .success-message {
+            text-align: center;
+            padding: 50px 30px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            border-radius: 20px;
+            margin-top: 20px;
+            display: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(89, 136, 93, 0.5);
+        }
+
+        .success-message::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+            animation: pulse 2s infinite;
+        }
+
+        .success-icon {
+            position: relative;
+            z-index: 1;
+            font-size: 4rem;
+            margin-bottom: 25px;
+        }
+
+        .success-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .success-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        /* Анимации */
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* Адаптация под разные устройства */
+        @media (max-width: 992px) {
+            .contact-item {
+                padding: 25px 20px;
+            }
+
+            .icon-circle {
+                width: 120px;
+                height: 120px;
+            }
+
+            .icon-circle i {
+                font-size: 50px;
+            }
+
+            .form-section {
+                padding: 40px 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title h1 {
+                font-size: 2.2rem;
+            }
+
+            .contact-item {
+                padding: 20px 15px;
+            }
+
+            .icon-circle {
+                width: 100px;
+                height: 100px;
+            }
+
+            .icon-circle i {
+                font-size: 40px;
+            }
+
+            .contact-label {
+                font-size: 1.1rem;
+            }
+
+            .form-section {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .page-subtitle {
+                font-size: 1rem;
+            }
+
+            .contact-icons-container {
+                gap: 30px;
+            }
+
+            .icon-circle {
+                width: 90px;
+                height: 90px;
+            }
+
+            .icon-circle i {
+                font-size: 36px;
+            }
+
+            .contact-label {
+                font-size: 1rem;
+            }
+
+            .form-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div>
+    <header class="header">
+        <div class="logo-container">
+            <a href="{% url 'basic_page:main_page' %}"><img src="{% static 'images/logo.png' %}"
+                                                            style="max-width: 150px;"></a>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="{% url 'basic_page:main_page' %}" class="navs-link">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link has-dropdown">Услуги</a>
+                <div class="dropdown-content">
+                    <h3>Наши услуги</h3>
+                    <ul>
+                        <li><a href="{% url 'basic_page:choice' %}">Выбор камня</a></li>
+                        <li><a href="{% url 'basic_page:dimensions' %}">Замер</a></li>
+                        <li><a href="{% url 'basic_page:productions' %}">Изготовление</a></li>
+                        <li><a href="{% url 'basic_page:delivery' %}">Доставка</a></li>
+                        <li><a href="{% url 'basic_page:installation' %}">Монтаж</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link has-dropdown">Камень</a>
+                <div class="dropdown-content">
+                    <h3>Виды камня</h3>
+                    <ul>
+                        <li><a href="{% url 'basic_page:selection' %}">Выбор камня</a></li>
+                        <li><a href="{% url 'basic_page:quartz' %}">Кварцевый камень</a></li>
+                        <li><a href="{% url 'basic_page:acryl' %}">Акриловый камень</a></li>
+                        <li><a href="{% url 'basic_page:natural' %}">Натуральный камень</a></li>
+                        <li><a href="{% url 'basic_page:porcelain' %}">Керамика</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link has-dropdown">Изделия</a>
+                <div class="dropdown-content">
+                    <h3>Наша продукция</h3>
+                    <ul>
+                        <li><a href="{% url 'basic_page:topstone' %}">Столешницы</a></li>
+                        <li><a href="{% url 'basic_page:sills' %}">Подоконники</a></li>
+                        <li><a href="{% url 'basic_page:sinks' %}">Раковины и мойки</a></li>
+                        <li><a href="{% url 'basic_page:stairs' %}">Лестницы и ступени</a></li>
+                        <li><a href="{% url 'basic_page:panels' %}">Стеновые панели</a></li>
+                        <li><a href="{% url 'basic_page:bar' %}">Барная стойка</a></li>
+                        <li><a href="{% url 'basic_page:reception' %}">Стойки ресепшн</a></li>
+                        <li><a href="{% url 'basic_page:fireplace' %}">Камины</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link has-dropdown">Каталог</a>
+                <div class="dropdown-content">
+                    <h3>Каталог камня</h3>
+                    <ul>
+                        <li><a href="{% url 'catalog:quartz_catalog' %}">Каталог кварцевого камня</a></li>
+                        <li><a href="{% url 'catalog:quartz_catalog' %}">Каталог акрилового камня</a></li>
+                        <li><a href="{% url 'catalog:quartz_catalog' %}">Каталог натурального камня</a></li>
+                        <li><a href="{% url 'catalog:quartz_catalog' %}">Каталог керамики</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link has-dropdown">О компании</a>
+                <div class="dropdown-content">
+                    <h3>О нас</h3>
+                    <ul>
+                        <li><a href="{% url 'basic_page:about' %}">О компании</a></li>
+                        <li><a href="{% url 'basic_page:about' %}">Партнерство</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link has-dropdown">Медиа</a>
+                <div class="dropdown-content">
+                    <h3>Медиа-материалы</h3>
+                    <ul>
+                        <li><a href="{% url 'basic_page:media' %}">Тренды</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+        <!-- Иконки и кнопка -->
+        <div class="icons-container">
+            <a href="https://vk.com/makerstone" style="text-decoration: none;">
+                <div class="icon vk">
+                    <i class="fab fa-vk"></i>
+                </div>
+            </a>
+            <a href="https://wa.me/79859671188" style="text-decoration: none;">
+                <div class="icon whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+            </a>
+                <a href="tel:+7 985 967-11-88" style="text-decoration: none;">
+                    <div class="icon phone">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                </a>
+                <a href="mailto:makerstone2020@gmail.com" style="text-decoration: none;">
+                    <div class="icon email">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </a>
+                <a href="{% url 'basic_page:zamer' %}">
+                    <button class="btn-measure">ЗАМЕР</button>
+                </a>
+        </div>
+
+        <!-- Кнопка меню для мобильных -->
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- Мобильное меню (скрыто по умолчанию) -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav">
+            <li class="mobile-nav-item">
+                <a href="#" class="navs-link">Главная</a>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link has-dropdown">Услуги</a>
+                <div class="mobile-dropdown-content">
+                    <a href="{% url 'basic_page:choice' %}">Выбор камня</a>
+                    <a href="{% url 'basic_page:dimensions' %}">Замер</a>
+                    <a href="{% url 'basic_page:productions' %}">Изготовление</a>
+                    <a href="{% url 'basic_page:delivery' %}">Доставка</a>
+                    <a href="{% url 'basic_page:installation' %}">Монтаж</a>
+                </div>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link has-dropdown">Камень</a>
+                <div class="mobile-dropdown-content">
+                    <a href="{% url 'basic_page:selection' %}">Выбор камня</a>
+                    <a href="{% url 'basic_page:quartz' %}">Кварцевый камень</a>
+                    <a href="{% url 'basic_page:acryl' %}">Акриловый камень</a>
+                    <a href="{% url 'basic_page:natural' %}">Натуральный камень</a>
+                    <a href="{% url 'basic_page:porcelain' %}">Керамика</a>
+                </div>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link has-dropdown">Изделия</a>
+                <div class="mobile-dropdown-content">
+                    <a href="{% url 'basic_page:topstone' %}">Столешницы</a>
+                    <a href="{% url 'basic_page:sills' %}">Подоконники</a>
+                    <a href="{% url 'basic_page:sinks' %}">Раковины и мойки</a>
+                    <a href="{% url 'basic_page:stairs' %}">Лестницы и ступени</a>
+                    <a href="{% url 'basic_page:panels' %}">Стеновые панели</a>
+                    <a href="{% url 'basic_page:bar' %}">Барная стойка</a>
+                    <a href="{% url 'basic_page:reception' %}">Стойки ресепшн</a>
+                    <a href="{% url 'basic_page:fireplace' %}">Камины</a>
+                </div>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link has-dropdown">Каталог</a>
+                <div class="mobile-dropdown-content">
+                    <a href="{% url 'catalog:quartz_catalog' %}">Каталог кварцевого камня</a>
+                    <a href="{% url 'catalog:quartz_catalog' %}">Каталог акрилового камня</a>
+                    <a href="{% url 'catalog:quartz_catalog' %}">Каталог натурального камня</a>
+                    <a href="{% url 'catalog:quartz_catalog' %}">Каталог керамики</a>
+                </div>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link has-dropdown">О компании</a>
+                <div class="mobile-dropdown-content">
+                    <a href="{% url 'basic_page:about' %}">О компании</a>
+                    <a href="{% url 'basic_page:about' %}">Партнерство</a>
+                </div>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="#" class="mobile-nav-link has-dropdown">Медиа</a>
+                <div class="mobile-dropdown-content">
+                    <a href="{% url 'basic_page:media' %}">Тренды</a>
+                </div>
+            </li>
+        </ul>
+
+        <div class="mobile-icons-container">
+            <a href="https://vk.com/makerstone style="text-decoration: none;"">
+                <div class="icon vk">
+                    <i class="fab fa-vk"></i>
+                </div>
+            </a>
+            <a href="https://wa.me/79859671188" style="text-decoration: none;">
+                <div class="icon whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <a href="tel:+7 985 967-11-88" style="text-decoration: none;">
+                    <div class="icon phone">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                </a>
+                <a href="mailto:makerstone2020@gmail.com" style="text-decoration: none;">
+                    <div class="icon email">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </a>
+        </div>
+        <a style="text-decoration: none;" href="{% url 'basic_page:zamer' %}">
+            <button class="mobile-btn-measure">ЗАМЕР</button>
+        </a>
+    </div>
+
+    <script>
+        // Мобильное меню
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileDropdownToggles = document.querySelectorAll('.mobile-nav-link.has-dropdown');
+
+        // Функция для переключения мобильного меню
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation(); // Предотвращаем всплытие события
+
+            // Переключаем мобильное меню
+            mobileMenu.classList.toggle('active');
+
+            // Переключаем иконку
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Мобильные выпадающие меню
+        mobileDropdownToggles.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const dropdownContent = this.nextElementSibling;
+                dropdownContent.classList.toggle('active');
+
+                // Закрываем другие открытые меню
+                mobileDropdownToggles.forEach(otherItem => {
+                    if (otherItem !== this) {
+                        otherItem.nextElementSibling.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Закрываем мобильное меню при клике в любом месте
+        document.addEventListener('click', function(e) {
+            // Если клик был не по мобильному меню и не по гамбургеру
+            if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+
+                // Возвращаем иконку гамбургера
+                const icon = hamburger.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+
+                // Закрываем все выпадающие меню
+                document.querySelectorAll('.mobile-dropdown-content').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            }
+        });
+
+        // Предотвращаем закрытие меню при клике внутри него
+        mobileMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    </script>
+</div>
+
+<script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileDropdownToggles = document.querySelectorAll('.mobile-nav-link.has-dropdown');
+
+    hamburger.addEventListener('click', function(e) {
+        e.stopPropagation(); // Предотвращаем всплытие события
+
+        mobileMenu.classList.toggle('active');
+
+        const icon = this.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+    });
+
+    // Мобильные выпадающие меню
+    mobileDropdownToggles.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const dropdownContent = this.nextElementSibling;
+            dropdownContent.classList.toggle('active');
+
+            // Закрываем другие открытые меню
+            mobileDropdownToggles.forEach(otherItem => {
+                if (otherItem !== this) {
+                    otherItem.nextElementSibling.classList.remove('active');
+                }
+            });
+        });
+    });
+
+    // Закрываем мобильное меню при клике в любом месте
+    document.addEventListener('click', function(e) {
+        // Если клик был не по мобильному меню и не по гамбургеру
+        if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+            mobileMenu.classList.remove('active');
+
+            // Возвращаем иконку гамбургера
+            const icon = hamburger.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+
+            // Закрываем все выпадающие меню
+            document.querySelectorAll('.mobile-dropdown-content').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        }
+    });
+
+    // Предотвращаем закрытие меню при клике внутри него
+    mobileMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+</script>
+</div>
+
+<!-- Основной контент страницы -->
+<div class="contact-page">
+    <div class="page-title">
+        <h1>Наши контакты</h1>
+        <div class="page-subtitle">
+            Свяжитесь с нами любым удобным способом. Мы готовы ответить на ваши вопросы и помочь с выбором изделий из
+            камня.
+        </div>
+    </div>
+
+    <div class="contact-icons-container">
+        <a href="https://vk.com/makerstone" class="contact-item vk" target="_blank" style="text-decoration: none;">
+            <div class="icon-container">
+                <div class="icon-circle">
+                    <i class="fab fa-vk"></i>
+                </div>
+            </div>
+            <div class="contact-label">ВКонтакте</div>
+        </a>
+
+        <a href="https://wa.me/79859671188" class="contact-item whatsapp" target="_blank" style="text-decoration: none;">
+            <div class="icon-container">
+                <div class="icon-circle">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+            </div>
+            <div class="contact-label">WhatsApp</div>
+        </a>
+
+        <a href="tel:+79859671188" class="contact-item phone" style="text-decoration: none;">
+            <div class="icon-container">
+                <div class="icon-circle">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+            </div>
+            <div class="contact-label">Номер телефона: <br> +7 985 967-11-88</div>
+        </a>
+
+        <a href="mailto:makerstone2020@gmail.com" class="contact-item email" style="text-decoration: none;">
+            <div class="icon-container">
+                <div class="icon-circle">
+                    <i class="fas fa-envelope"></i>
+                </div>
+            </div>
+            <div class="contact-label">Почта: <br> makerstone2020@gmail.com</div>
+        </a>
+    </div>
+
+    <!-- Форма обратной связи (взято из вашего исходного кода) -->
+    <div class="form-section">
+        <h2 class="form-title">Сделать заявку</h2>
+        <div class="form-container">
+            <form id="contactForm" method="post">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="full_name">ФИО</label>
+                    <input type="text" id="full_name" name="full_name" class="form-control"
+                           placeholder="Введите ваше полное имя" required>
+                    <div class="invalid-feedback" id="fullNameError"
+                         style="display: none; color: #dc3545; margin-top: 5px; font-size: 0.9rem;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Номер телефона</label>
+                    <input type="tel" id="phone" name="phone" class="form-control"
+                           placeholder="+7 (999) 999-99-99" required>
+                    <div class="invalid-feedback" id="phoneError"
+                         style="display: none; color: #dc3545; margin-top: 5px; font-size: 0.9rem;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control"
+                           placeholder="example@mail.com" required>
+                    <div class="invalid-feedback" id="emailError"
+                         style="display: none; color: #dc3545; margin-top: 5px; font-size: 0.9rem;"></div>
+                </div>
+
+                <div class="checkbox-container">
+                    <input type="checkbox" id="privacyPolicy" name="privacyPolicy" required>
+                    <label for="privacyPolicy" class="custom-checkbox"></label>
+                    <label for="privacyPolicy">Нажимая кнопку «Отправить» я соглашаюсь с условиями политики
+                        конфиденциальности и обработки данных</label>
+                    <div class="invalid-feedback" id="privacyPolicyError"
+                         style="display: none; color: #dc3545; margin-top: 5px; font-size: 0.9rem;"></div>
+                </div>
+
+                <button type="submit" class="submit-btn">Отправить</button>
+            </form>
+
+            <div class="success-message" id="successMessage" style="display: none;">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>Спасибо за обращение!</h3>
+                <p>Мы скоро с вами свяжемся для уточнения деталей.</p>
+            </div>
+        </div>
+    </div>
+<!-- Заглушка для footer -->
+<div>
+    <footer class="ms-footer">
+        <div class="ms-footer-content">
+            <div class="ms-footer-section"><a href="{% url 'basic_page:media' %}" style="text-decoration: none; color: inherit;">Медиа</a></div>
+            <div class="ms-footer-section"><a href="{% url 'basic_page:calculator' %}" style="text-decoration: none; color: inherit;">Калькулятор</a></div>
+            <div class="ms-footer-section"><a href="{% url 'basic_page:calculator' %}" style="text-decoration: none; color: inherit;">Контакты</a></div>
+            <div class="ms-footer-section"><a href="{% url 'basic_page:politic_conf' %}" style="text-decoration: none; color: inherit;">Политика конфиденциальности</a></div>
+        </div>
+        <div class="ms-footer-copyright">
+                       <div class="ms-footer-section"><a href="{% url 'basic_page:main_page' %}" style="text-decoration: none; color: inherit;">© 2017-2025, MAKER STONE</a></div>
+        </div>
+    </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        spaceBetween: 10,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        loop: true,
+    });
+
+    // Обработчик формы
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let isValid = true;
+
+        const phoneInput = document.getElementById('phone');
+        const phonePattern = /^(\+7|8)[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/;
+        const phoneError = document.getElementById('phoneError');
+
+        if (!phonePattern.test(phoneInput.value)) {
+            phoneError.style.display = 'block';
+            phoneInput.style.borderColor = '#dc3545';
+            isValid = false;
+        } else {
+            phoneError.style.display = 'none';
+            phoneInput.style.borderColor = '#ddd';
+        }
+
+        const emailInput = document.getElementById('email');
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailError = document.getElementById('emailError');
+
+        if (!emailPattern.test(emailInput.value)) {
+            emailError.style.display = 'block';
+            emailInput.style.borderColor = '#dc3545';
+            isValid = false;
+        } else {
+            emailError.style.display = 'none';
+            emailInput.style.borderColor = '#ddd';
+        }
+
+        if (isValid) {
+            const formData = new FormData(this);
+
+            // Отправка данных через fetch
+            fetch("{% url 'basic_page:calculator' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    this.style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    });
+
+    // Обработчики аккордеона с плавной анимацией
+    const accordionItems = document.querySelectorAll('.accordion-item');
+
+    accordionItems.forEach(item => {
+        const header = item.querySelector('.accordion-header');
+        const content = item.querySelector('.accordion-content');
+
+        header.addEventListener('click', () => {
+            // Закрываем все другие аккордеоны
+            accordionItems.forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.accordion-content').style.maxHeight = '0';
+                    otherItem.querySelector('.accordion-content').style.padding = '0 25px';
+                }
+            });
+
+            // Переключаем текущий аккордеон
+            const isActive = item.classList.contains('active');
+
+            if (isActive) {
+                // Плавное закрытие
+                content.style.maxHeight = '0';
+                content.style.padding = '0 25px';
+                setTimeout(() => {
+                    item.classList.remove('active');
+                }, 400); // Должно совпадать с длительностью анимации
+            } else {
+                // Плавное открытие
+                item.classList.add('active');
+                // Используем scrollHeight для плавной анимации
+                content.style.maxHeight = content.scrollHeight + 'px';
+                content.style.padding = '0 25px 25px';
+            }
+        });
+    });
+</script>
+</body>
+</html>
