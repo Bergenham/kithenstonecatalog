@@ -40,7 +40,9 @@ class Stone(models.Model):
             MinValueValidator(100),
             MaxValueValidator(9999999.99)
         ],
-        verbose_name='Примерная цена'
+        verbose_name='Примерная цена',
+        null=True,
+        blank=True
     )
 
     priview_img = models.ImageField(
@@ -51,22 +53,28 @@ class Stone(models.Model):
     material = models.CharField(
         max_length=50,
         choices=MaterialChoices.choices,
-        verbose_name='Материал камня'
+        verbose_name='Материал камня',
+        null=True,
+        blank=True
     )
 
     country = models.CharField(
         max_length=50,
         choices=CountryChoices.choices,
-        verbose_name='Страна изготовления'
+        verbose_name='Страна изготовления',
+        null=True,
+        blank=True
     )
 
     thickness = models.PositiveIntegerField(
         validators=[MaxValueValidator(9999)],
-        verbose_name='Толщина (мм)'
+        verbose_name='Толщина (мм)',
+        null=True,
+        blank=True
     )
 
-    article = models.CharField(max_length=100 ,unique=True, verbose_name='Артикул')
-    about_brand = models.TextField(verbose_name='О бренде')
+    article = models.CharField(max_length=100 ,unique=True, verbose_name='Артикул', null=True, blank=True)
+    about_brand = models.TextField(verbose_name='О бренде', null=True, blank=True)
     archive = models.BooleanField(default=False, verbose_name='В архиве')
 
     def __str__(self):
@@ -125,26 +133,36 @@ class QuartzStone(Stone):
     brand_stone = models.CharField(
         max_length=50,
         choices=BrandStoneChoices.choices,
-        verbose_name='Бренд'
+        verbose_name='Бренд',
+        null=True,
+        blank=True,
     )
     color = models.CharField(
         max_length=50,
         choices=ColorChoices.choices,
-        verbose_name='Цвет'
+        verbose_name='Цвет',
+        null=True,
+        blank=True,
     )
     texture = models.CharField(
         max_length=50,
         choices=TextureChoices.choices,
-        verbose_name='Текстура'
+        verbose_name='Текстура',
+        null=True,
+        blank=True,
     )
     faktura = models.CharField(
         max_length=50,
         choices=FakturaChoices.choices,
-        verbose_name='Фактура'
+        verbose_name='Фактура',
+        null=True,
+        blank=True,
     )
     link_serf = models.CharField(
         choices=LinkSerfChoices.choices,
-        verbose_name='Ссылка на сертификаты'
+        verbose_name='Ссылка на сертификаты',
+        null=True,
+        blank=True,
     )
 
     class Meta:
@@ -199,27 +217,37 @@ class AcrylicStone(Stone):
         max_length=50,
         choices=BrandStoneChoices.choices,
         verbose_name='Бренд',
+        null=True,
+        blank=True,
 
     )
     color = models.CharField(
         max_length=50,
         choices=ColorChoices.choices,
-        verbose_name='Цвет'
+        verbose_name='Цвет',
+        null=True,
+        blank=True,
     )
     texture = models.CharField(
         max_length=50,
         choices=TextureChoices.choices,
-        verbose_name='Текстура'
+        verbose_name='Текстура',
+        null=True,
+        blank=True,
     )
     faktura = models.CharField(
         max_length=50,
         choices=FakturaChoices.choices,
-        verbose_name='Фактура'
+        verbose_name='Фактура',
+        null=True,
+        blank=True,
     )
     link_serf = models.CharField(
         max_length=200,
         choices=LinkSerfChoices.choices,
-        verbose_name='Ссылка на сертификаты'
+        verbose_name='Ссылка на сертификаты',
+        null=True,
+        blank=True,
     )
 
     class Meta:
@@ -253,27 +281,37 @@ class NaturalStone(Stone):
     brand_stone = models.CharField(
         max_length=50,
         choices=BrandStoneChoices.choices,
-        verbose_name='Бренд'
+        verbose_name='Бренд',
+        null=True,
+        blank=True,
     )
     color = models.CharField(
         max_length=50,
         choices=ColorChoices.choices,
-        verbose_name='Цвет'
+        verbose_name='Цвет',
+        null=True,
+        blank=True,
     )
     texture = models.CharField(
         max_length=50,
         choices=TextureChoices.choices,
-        verbose_name='Текстура'
+        verbose_name='Текстура',
+        null=True,
+        blank=True,
     )
     faktura = models.CharField(
         max_length=50,
         choices=FakturaChoices.choices,
-        verbose_name='Фактура'
+        verbose_name='Фактура',
+        null=True,
+        blank=True,
     )
     link_serf = models.CharField(
         max_length=50,
         choices=LinkSerfChoices.choices,
-        verbose_name='Ссылка на сертификаты'
+        verbose_name='Ссылка на сертификаты',
+        null=True,
+        blank=True,
     )
 
     class Meta:
@@ -305,27 +343,37 @@ class CeramicsStone(Stone):
     brand_stone = models.CharField(
         max_length=50,
         choices=BrandStoneChoices.choices,
-        verbose_name='Бренд'
+        verbose_name='Бренд',
+        null=True,
+        blank=True,
     )
     color = models.CharField(
         max_length=50,
         choices=ColorChoices.choices,
-        verbose_name='Цвет'
+        verbose_name='Цвет',
+        null=True,
+        blank=True,
     )
     texture = models.CharField(
         max_length=50,
         choices=TextureChoices.choices,
-        verbose_name='Текстура'
+        verbose_name='Текстура',
+        null=True,
+        blank=True,
     )
     faktura = models.CharField(
         max_length=50,
         choices=FakturaChoices.choices,
-        verbose_name='Фактура'
+        verbose_name='Фактура',
+        null=True,
+        blank=True,
     )
     link_serf = models.CharField(
         max_length=50,
         choices=LinkSerfChoices.choices,
-        verbose_name='Ссылка на сертификаты'
+        verbose_name='Ссылка на сертификаты',
+        null=True,
+        blank=True,
     )
 
     class Meta:
