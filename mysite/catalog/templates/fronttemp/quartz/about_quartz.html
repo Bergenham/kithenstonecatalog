@@ -96,6 +96,17 @@
             margin-top: 5px;
         }
 
+        .product-price-note {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 10px 16px;
+            border-radius: 14px;
+            background: rgba(89, 136, 93, 0.08);
+            color: #4a684d;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
         .contact-btn {
             background-color: var(--primary-color);
             color: white;
@@ -331,6 +342,36 @@
             font-size: 1.1rem;
             padding-left: 32px;
             color: var(--text-color);
+        }
+
+        .fallback-text {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 12px;
+            background: rgba(89, 136, 93, 0.08);
+            color: #4a684d;
+            font-size: 1rem;
+            font-style: italic;
+        }
+
+        .image-fallback,
+        .gallery-empty {
+            width: 100%;
+            min-height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(89, 136, 93, 0.12), rgba(111, 160, 116, 0.18));
+            color: #4a684d;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .gallery-empty {
+            min-height: 280px;
         }
 
         /* Форма обратной связи */
@@ -697,6 +738,12 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: 0.6s;
             z-index: -1;
+        }
+
+        .download-btn.is-disabled {
+            background: linear-gradient(135deg, #9aa7a0, #b7c0ba);
+            box-shadow: none;
+            cursor: default;
         }
 
         .download-btn:hover {
@@ -1647,8 +1694,12 @@
         <div class="product-title">
             <h1>{{ stone.name_stone }}</h1>
             <div class="price-block">
+                {% if stone.abt_prise %}
                 <span class="product-price">От {{ stone.abt_prise|floatformat }} р.</span>
                 <span class="product-unit">за погонный метр (100×60 см)</span>
+                {% else %}
+                <span class="product-price-note">Уточните цену, связавшись с нами или позвонив нам.</span>
+                {% endif %}
             </div>
         </div>
         <a href="{% url 'basic_page:zamer' %}">
@@ -1662,13 +1713,18 @@
         <h2 class="gallery-title">Примеры использования</h2>
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
+                {% if img_m %}
                 {% for img in img_m %}
                 <div class="swiper-slide">
                     <img src="{{ img.image.url }}"
                          alt="Jet Black 1">
                 </div>
                 {% endfor %}
-
+                {% else %}
+                <div class="swiper-slide">
+                    <div class="gallery-empty">Нету информации</div>
+                </div>
+                {% endif %}
             </div>
             <div class="swiper-button-next swiper-nav-btn"></div>
             <div class="swiper-button-prev swiper-nav-btn"></div>
@@ -1679,8 +1735,12 @@
     <!-- Детальная информация -->
     <div class="details-section">
         <div class="product-image">
+            {% if stone.priview_img %}
             <img src="{{ stone.priview_img.url }}"
                  alt="{{ stone.priview_img }}">
+            {% else %}
+            <div class="image-fallback">Нету информации</div>
+            {% endif %}
         </div>
         <div class="product-info">
             <h1>{{ stone.name_stone }}</h1>
@@ -1689,49 +1749,55 @@
                     <div class="info-label">
                         <i class="fas fa-tag"></i> Бренд:
                     </div>
-                    <div class="info-value">{{ stone.brand_stone }}</div>
+                    <div class="info-value">{% if stone.brand_stone %}{{ stone.brand_stone }}{% else %}<span class="fallback-text">Нету информации</span>{% endif %}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">
                         <i class="fas fa-cube"></i> Материал:
                     </div>
-                    <div class="info-value">{{ stone.material }}</div>
+                    <div class="info-value">{% if stone.material %}{{ stone.material }}{% else %}<span class="fallback-text">Нету информации</span>{% endif %}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">
                         <i class="fas fa-palette"></i> Цвет:
                     </div>
-                    <div class="info-value">{{ stone.color }}</div>
+                    <div class="info-value">{% if stone.color %}{{ stone.color }}{% else %}<span class="fallback-text">Нету информации</span>{% endif %}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">
                         <i class="fas fa-ruler-vertical"></i> Толщина:
                     </div>
-                    <div class="info-value">{{ stone.thickness }} мм</div>
+                    <div class="info-value">
+                        {% if stone.thickness %}
+                        {{ stone.thickness }} мм
+                        {% else %}
+                        <span class="fallback-text">Нету информации</span>
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">
                         <i class="fas fa-flag"></i> Страна:
                     </div>
-                    <div class="info-value">{{ stone.country }}</div>
+                    <div class="info-value">{% if stone.country %}{{ stone.country }}{% else %}<span class="fallback-text">Нету информации</span>{% endif %}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">
                         <i class="fas fa-barcode"></i> Артикул:
                     </div>
-                    <div class="info-value">{{ stone.article }}</div>
+                    <div class="info-value">{% if stone.article %}{{ stone.article }}{% else %}<span class="fallback-text">Нету информации</span>{% endif %}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">
                         <i class="fas fa-spa"></i> Текстура:
                     </div>
-                    <div class="info-value">{{ stone.texture }}</div>
+                    <div class="info-value">{% if stone.texture %}{{ stone.texture }}{% else %}<span class="fallback-text">Нету информации</span>{% endif %}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">
                         <i class="fas fa-spa"></i> Фактура:
                     </div>
-                    <div class="info-value">{{ stone.faktura }}</div>
+                    <div class="info-value">{% if stone.faktura %}{{ stone.faktura }}{% else %}<span class="fallback-text">Нету информации</span>{% endif %}</div>
                 </div>
             </div>
         </div>
@@ -1801,7 +1867,7 @@
                     <i class="fas fa-plus accordion-icon"></i>
                 </div>
                 <div class="accordion-content">
-                    <p>{{ stone.about_brand }}</p>
+                    <p>{% if stone.about_brand %}{{ stone.about_brand }}{% else %}<span class="fallback-text">Нету информации</span>{% endif %}</p>
                 </div>
             </div>
 
@@ -1836,11 +1902,17 @@
                 </div>
             </div>
         </div>
+        {% if stone.link_serf %}
         <a style="text-decoration: none;" href="{{ stone.link_serf }}">
             <button class="download-btn">
                 <i class="fas fa-download"></i> Скачать сертификаты
             </button>
         </a>
+        {% else %}
+        <button class="download-btn is-disabled" type="button">
+            <i class="fas fa-ban"></i> Сертификаты недоступны
+        </button>
+        {% endif %}
     </div>
 </div>
 

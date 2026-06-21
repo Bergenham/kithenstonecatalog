@@ -18,6 +18,7 @@ from selenium.common.exceptions import (
     TimeoutException, NoSuchElementException, StaleElementReferenceException,
     ElementClickInterceptedException, WebDriverException
 )
+from ._parser_utils import emit, normalize_model_payload
 
 # -------------------- НАСТРАИВАЕМЫЕ КОНСТАНТЫ --------------------
 APP_NAME = 'catalog'  # <- имя твоего django-приложения (замени, если нужно)
@@ -326,8 +327,8 @@ class Command(BaseCommand):
                     color_raw = attrs.get('Цвет') or attrs.get('Color') or ''
                     texture_raw = attrs.get('Коллекция') or attrs.get('Текстура') or ''
 
-                    color = map_value(color_raw, COLOR_MAP, 'Белый')
-                    texture = map_value(texture_raw, TEXTURE_MAP, 'Однотонная')
+                    color = map_value(color_raw, COLOR_MAP, None)
+                    texture = map_value(texture_raw, TEXTURE_MAP, None)
 
                     # IMPORTANT: в твоём файле блок, который раньше был "Бренд", теперь содержит country.
                     brand_block_candidates = ['Бренд', 'Производитель', 'Бренд/производитель', 'Brand', 'Manufacturer']
@@ -341,7 +342,7 @@ class Command(BaseCommand):
                             if key in attrs:
                                 country_raw = attrs.get(key, '')
                                 break
-                    country = map_country(country_raw, DEFAULT_COUNTRY)
+                    country = map_country(country_raw, None)
 
                     # Если article всё еще пустой — сгенерируем уникальный
                     if not article:
@@ -428,7 +429,7 @@ class Command(BaseCommand):
                     # Запись в базу (get_or_create по article). Обновляем поля.
                     with transaction.atomic():
                         try:
-                            defaults = {
+                            raw_defaults = {
                                 'name_stone': name_stone or f"{BRAND_NAME} {article}",
                                 'abt_prise': ABT_PRIZE,
                                 'material': MATERIAL,
@@ -442,6 +443,18 @@ class Command(BaseCommand):
                                 'faktura': FAKTURA_STR,
                                 'link_serf': LINK_SERF,
                             }
+                            emit(print, "INFO", f"Preparing payload for AcrylicStone article={article}")
+                            defaults = normalize_model_payload(
+                                AcrylicStone,
+                                raw_defaults,
+                                print,
+                                choice_aliases={
+                                    'link_serf': {
+                                        'Durasein': AcrylicStone.LinkSerfChoices.DURASEIN,
+                                        LINK_SERF: AcrylicStone.LinkSerfChoices.DURASEIN,
+                                    }
+                                },
+                            )
                             instance, created = AcrylicStone.objects.get_or_create(article=article, defaults=defaults)
                             if not created:
                                 # обновляем только полезные поля (не портим вручную исправленное)
@@ -457,6 +470,10 @@ class Command(BaseCommand):
                                 instance.texture = texture
                                 instance.faktura = FAKTURA_STR
                                 instance.link_serf = LINK_SERF
+                                for field_name, value in defaults.items():
+                                    if field_name == 'name_stone' and value is None:
+                                        continue
+                                    setattr(instance, field_name, value)
                                 instance.save()
                                 print(f"UPDATED: {instance.article} (id={instance.pk})")
                             else:

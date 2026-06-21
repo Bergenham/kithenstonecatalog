@@ -1,7 +1,7 @@
 <div class="catalog-grid">
     {% if stones %}
         {% for stone in stones %}
-        <a href="{% url 'catalog:stone_detail_c' article_get=stone.pk %}">
+        <a href="{% url 'catalog:stone_detail_c' article_get=stone.article %}">
             <div class="stone-card">
                 <div class="image-wrapper">
                     <img src="{{ stone.priview_img.url }}"

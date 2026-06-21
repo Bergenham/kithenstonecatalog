@@ -14,6 +14,7 @@ def get_upload_path(instance, filename):
     folder = material_folders.get(instance.material, 'other')
     return f'stones/{folder}/previews/{filename}'
 
+
 class Stone(models.Model):
     class MaterialChoices(models.TextChoices):
         QUARTZ = 'Кварцевый камень', 'Кварцевый камень'
@@ -73,7 +74,7 @@ class Stone(models.Model):
         blank=True
     )
 
-    article = models.CharField(max_length=100 ,unique=True, verbose_name='Артикул', null=True, blank=True)
+    article = models.CharField(max_length=100, unique=True, verbose_name='Артикул', null=True, blank=True)
     about_brand = models.TextField(verbose_name='О бренде', null=True, blank=True)
     archive = models.BooleanField(default=False, verbose_name='В архиве')
 
@@ -101,34 +102,41 @@ class StoneImage(models.Model):
         return f'Изображение для {self.stone.name_stone}'
 
 
-
 class QuartzStone(Stone):
     class BrandStoneChoices(models.TextChoices):
         CAESARSTONE = 'Caesarstone'
         TECHNISTONE = 'Technistone'
-
+        PRIMAX_QUARTZ = 'PrimaxQuartz'
 
     class ColorChoices(models.TextChoices):
-        BEIGE =  'Бежевый', 'Бежевый'
-        WHITE =  'Белый', 'Белый'
-        BROWN =  'Коричневый', 'Коричневый'
-        GREY =  'Серый', 'Серый'
-        DARK_GREY =  'Темносерый', 'Темносерый'
-        BLACK =  'Черный', 'Черный'
+        BEIGE = 'Бежевый', 'Бежевый'
+        WHITE = 'Белый', 'Белый'
+        BROWN = 'Коричневый', 'Коричневый'
+        GREY = 'Серый', 'Серый'
+        DARK_GREY = 'Темносерый', 'Темносерый'
+        BLACK = 'Черный', 'Черный'
+        LIGHT = 'Светлый', 'Светлый'
+        DARK = 'Темный', 'Темный'
+        MULTICOLOR = 'Многоцветный', 'Многоцветный'
 
     class TextureChoices(models.TextChoices):
-        CONCRETE =  'Бетон', 'Бетон'
-        MARBLE =  'Мраморная', 'Мраморная'
-        SINGLE_COLOR =  'Однотонная', 'Однотонная'
-        TERRAZZO =  'Тераццо', 'Тераццо'
+        CONCRETE = 'Бетон', 'Бетон'
+        MARBLE = 'Мраморная', 'Мраморная'
+        SINGLE_COLOR = 'Однотонная', 'Однотонная'
+        TERRAZZO = 'Терраццо', 'Терраццо'
+        PRIMAX_QUARTZ = 'Праймакс Кварц', 'Праймакс Кварц'
+        PRIMAX_QUARTZ_FRESCO = 'Праймакс Кварц Фреско', 'Праймакс Кварц Фреско'
 
     class FakturaChoices(models.TextChoices):
-        HONED =  'Матовая', 'Матовая'
-        POLISHED =  'Полированная', 'Полированная'
+        HONED = 'Матовая', 'Матовая'
+        POLISHED = 'Полированная', 'Полированная'
+        STANDARD = 'Стандартная', 'Стандартная'
+        FBP = 'FBP', 'FBP'
 
     class LinkSerfChoices(models.TextChoices):
-        CAESARSTONE  = 'https://drive.google.com/drive/folders/1YgXlFi8KKDzPHz5IheKJlbepOqd1sl3M', 'Caesarstone'
-        TECHNISTONE  = 'https://technistone.ru/info/certificates/', 'Technistone'
+        CAESARSTONE = 'https://drive.google.com/drive/folders/1YgXlFi8KKDzPHz5IheKJlbepOqd1sl3M', 'Caesarstone'
+        TECHNISTONE = 'https://technistone.ru/info/certificates/', 'Technistone'
+        PRIMAX = 'https://primax.pro/catalog/acryl/certificates/', 'Primax'
 
     brand_stone = models.CharField(
         max_length=50,
@@ -145,7 +153,7 @@ class QuartzStone(Stone):
         blank=True,
     )
     texture = models.CharField(
-        max_length=50,
+        max_length=70,
         choices=TextureChoices.choices,
         verbose_name='Текстура',
         null=True,
@@ -174,13 +182,14 @@ class AcrylicStone(Stone):
     class BrandStoneChoices(models.TextChoices):
         HANEX = 'Hanex'
         DURASEIN = 'Durasein'
+        PRIMAX = 'Primax'
 
     class ColorChoices(models.TextChoices):
         BEIGE = 'Бежевый', 'Бежевый'
         WHITE = 'Белый', 'Белый'
         YELLOW = 'Жёлтый', 'Жёлтый'
         BROWN = 'Коричневый', 'Коричневый'
-        LIGHT_BLUE = 'Светло-голубой','Светло-голубой'
+        LIGHT_BLUE = 'Светло-голубой', 'Светло-голубой'
         LIGHT_BROWN = 'Светло-коричневый', 'Светло-коричневый'
         LIGHT_GREY = 'Светло-серый', 'Светло-серый'
         GREY = 'Серый', 'Серый'
@@ -193,17 +202,20 @@ class AcrylicStone(Stone):
         ORANGE = 'Оранжевый', 'Оранжевый'
         LIGHT_GREEN = 'Светло-зеленый', 'Светло-зеленый'
         BLUE = 'Синий', 'Синий'
-
-
+        LIGHT = 'Светлый', 'Светлый'
+        DARK = 'Темный', 'Темный'
+        MULTICOLOR = 'Многоцветный', 'Многоцветный'
 
     class TextureChoices(models.TextChoices):
         MARBLE = 'Мраморная', 'Мраморная'
-        SINGLE_COLOR =  'Однотонная', 'Однотонная'
+        SINGLE_COLOR = 'Однотонная', 'Однотонная'
         SANDS = 'Пески', 'Пески'
         MEDIUM_CHIP = 'Средний чип', 'Средний чип'
         LARGE_CHIP = 'Крупный чип', 'Крупный чип'
         WHITE = 'Белый', 'Белый'
-
+        PRIMAX_PREMIUM = 'Праймакс премиальный', 'Праймакс премиальный'
+        PRIMAX_BASIC = 'Праймакс Базовый', 'Праймакс Базовый'
+        PRIMAX_MARBLE = 'Праймакс мраморный', 'Праймакс мраморный'
 
     class FakturaChoices(models.TextChoices):
         SILKY = 'silky', 'Шелковистая'
@@ -212,6 +224,7 @@ class AcrylicStone(Stone):
     class LinkSerfChoices(models.TextChoices):
         HANEX = 'https://ssd.su/upload/iblock/74f/3hlh6ielnui9v0yw53ua78vqy1iikpdp.zip', 'Сертификат Hanex(ССД)'
         DURASEIN = 'https://ssd.su/upload/iblock/a62/2n2gdb8s43pfs2bqjt7g6wdwdx0vwvcf.zip', 'Сертификат Durasein(ССД)'
+        PRIMAX = 'https://primax.pro/catalog/acryl/certificates/', 'Primax'
 
     brand_stone = models.CharField(
         max_length=50,
@@ -219,7 +232,6 @@ class AcrylicStone(Stone):
         verbose_name='Бренд',
         null=True,
         blank=True,
-
     )
     color = models.CharField(
         max_length=50,
@@ -229,7 +241,7 @@ class AcrylicStone(Stone):
         blank=True,
     )
     texture = models.CharField(
-        max_length=50,
+        max_length=70,
         choices=TextureChoices.choices,
         verbose_name='Текстура',
         null=True,
@@ -270,7 +282,7 @@ class NaturalStone(Stone):
         LAYERED = 'layered', 'Слоистая'
 
     class FakturaChoices(models.TextChoices):
-        ROCKY = 'rocky', 'Скальная'
+        ROCKY = 'rocky', 'Скалистая'
         AGED = 'aged', 'Состаренная'
 
     class LinkSerfChoices(models.TextChoices):
@@ -379,6 +391,3 @@ class CeramicsStone(Stone):
     class Meta:
         verbose_name = 'Керамический камень'
         verbose_name_plural = 'Керамические камни'
-
-
-
