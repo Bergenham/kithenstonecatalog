@@ -1,14 +1,16 @@
 <div class="catalog-grid">
     {% if stones %}
         {% for stone in stones %}
-        <a href="{% url 'catalog:stone_detail_n' article_get=stone.article %}">
+        <a href="{% url 'catalog:stone_detail_n' article_get=stone.article %}" title="{{ stone.name_stone }} - {{ seo_h1 }}">
             <div class="stone-card">
                 <div class="image-wrapper">
                     <img src="{{ stone.priview_img.url }}"
-                         alt="{{ stone.name_stone }}"
+                         alt="{{ stone.name_stone }} - {{ seo_h1 }} Maker Stone"
                          class="stone-image"
                          width="600"
-                         height="600">
+                         height="600"
+                         loading="lazy"
+                         decoding="async">
                 </div>
                 <div class="stone-name"><b>{{ stone.name_stone }}</b></div>
             </div>

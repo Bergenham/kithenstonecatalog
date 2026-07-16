@@ -16,13 +16,33 @@ from catalog.models import Stone
 PROMPT_TEMPLATE = """Ты анализируешь изображение камня для каталога.
 Определи только следующие параметры по изображению: color, texture, faktura.
 
+Доступные варианты для этой модели:
+{choice_context}
+
 Правила ответа:
 1. Верни только JSON без markdown и без пояснений.
-2. Используй русский язык для значений.
-3. Если уверенности нет, выбери наиболее вероятный вариант.
-4. Формат строго такой:
-{"color": "значение", "texture": "значение", "faktura": "значение"}
+2. Сначала выбирай значения из доступных вариантов выше.
+3. Для color: если ни один доступный цвет явно не подходит изображению, верни новый короткий цвет на русском языке.
+4. Для texture и faktura: выбирай ближайший доступный вариант, если он не противоречит изображению.
+5. Если уверенности нет, выбери наиболее вероятный вариант.
+6. Формат строго такой:
+{{"color": "значение", "texture": "значение", "faktura": "значение"}}
 """
+
+RETRY_STATUS_CODES = {408, 429, 500, 502, 503, 504}
+
+CHOICE_ALIASES = {
+    "мрамор": "мраморная",
+    "мраморный": "мраморная",
+    "однотонный": "однотонная",
+    "однородная": "однотонная",
+    "бетонный": "бетон",
+    "матовый": "матовая",
+    "полированный": "полированная",
+    "полировка": "полированная",
+    "шелковистый": "шелковистая",
+    "перламутр": "жемчужная",
+}
 
 
 CYRILLIC_MAP = {
@@ -63,10 +83,11 @@ CYRILLIC_MAP = {
 
 
 class VisionClient:
-    def __init__(self, api_key, model, timeout):
+    def __init__(self, api_key, model, timeout, retries=2):
         self.api_key = api_key
         self.model = model
         self.timeout = timeout
+        self.retries = max(0, retries)
 
     def classify(self, image_path, prompt):
         image_url = self._build_data_url(image_path)
@@ -93,19 +114,31 @@ class VisionClient:
             method="POST",
         )
 
-        try:
-            with request.urlopen(req, timeout=self.timeout) as response:
-                data = json.loads(response.read().decode("utf-8"))
-        except error.HTTPError as exc:
-            details = exc.read().decode("utf-8", errors="replace")
-            raise CommandError(f"OpenAI API HTTP {exc.code}: {details}") from exc
-        except error.URLError as exc:
-            raise CommandError(f"OpenAI API connection error: {exc}") from exc
+        for attempt in range(self.retries + 1):
+            try:
+                with request.urlopen(req, timeout=self.timeout) as response:
+                    data = json.loads(response.read().decode("utf-8"))
+                break
+            except error.HTTPError as exc:
+                details = exc.read().decode("utf-8", errors="replace")
+                if exc.code in RETRY_STATUS_CODES and attempt < self.retries:
+                    time.sleep(self._retry_delay(attempt))
+                    continue
+                raise CommandError(f"OpenAI API HTTP {exc.code}: {details}") from exc
+            except error.URLError as exc:
+                if attempt < self.retries:
+                    time.sleep(self._retry_delay(attempt))
+                    continue
+                raise CommandError(f"OpenAI API connection error: {exc}") from exc
 
         text = self._extract_text(data)
         if not text:
             raise CommandError(f"OpenAI API returned no text payload: {data}")
         return self._extract_json(text), text
+
+    @staticmethod
+    def _retry_delay(attempt):
+        return min(2 ** attempt, 8)
 
     def _build_data_url(self, image_path):
         mime_type = mimetypes.guess_type(image_path.name)[0] or "image/jpeg"
@@ -252,6 +285,12 @@ class Command(BaseCommand):
             help="HTTP timeout для API.",
         )
         parser.add_argument(
+            "--retries",
+            type=int,
+            default=2,
+            help="Количество повторов для временных ошибок API.",
+        )
+        parser.add_argument(
             "--dry-run",
             action="store_true",
             help="Не сохранять изменения в БД и не менять models.py.",
@@ -273,7 +312,7 @@ class Command(BaseCommand):
             raise CommandError("Не задан OPENAI_API_KEY или --api-key")
 
         report_path = self._resolve_report_path(options["report"])
-        client = VisionClient(api_key, options["model"], options["timeout"])
+        client = VisionClient(api_key, options["model"], options["timeout"], options["retries"])
         updater = ChoiceUpdater(Path(__file__).resolve().parents[2] / "models.py")
         unknown_report = self._load_unknown_report(report_path)
 
@@ -285,6 +324,7 @@ class Command(BaseCommand):
         total_saved = 0
         total_skipped = 0
         total_unknown = 0
+        total_errors = 0
 
         for model_class in subclasses:
             queryset = model_class.objects.all().order_by("pk")
@@ -310,7 +350,25 @@ class Command(BaseCommand):
                     )
                     continue
 
-                ai_json, raw_text = client.classify(image_path, PROMPT_TEMPLATE)
+                prompt = self._build_prompt(model_class)
+                try:
+                    ai_json, raw_text = client.classify(image_path, prompt)
+                except CommandError as exc:
+                    if "OpenAI API HTTP 401" in str(exc) or "OpenAI API HTTP 403" in str(exc):
+                        raise
+                    total_errors += 1
+                    self._merge_unknown_report(
+                        unknown_report,
+                        model_class.__name__,
+                        stone.pk,
+                        {"_error": str(exc)},
+                    )
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f"[ERROR] {model_class.__name__}#{stone.pk}: {exc}"
+                        )
+                    )
+                    continue
                 total_processed += 1
 
                 unknown_fields = {}
@@ -379,10 +437,30 @@ class Command(BaseCommand):
             self.style.SUCCESS(
                 "\nГотово: "
                 f"api_calls={total_processed}, saved={total_saved}, "
-                f"skipped={total_skipped}, unknown={total_unknown}, "
+                f"skipped={total_skipped}, unknown={total_unknown}, errors={total_errors}, "
                 f"report={report_path}"
             )
         )
+
+    def _build_prompt(self, model_class):
+        return PROMPT_TEMPLATE.format(
+            choice_context=self._format_choice_context(model_class)
+        )
+
+    def _format_choice_context(self, model_class):
+        lines = []
+        for field_name in ("color", "texture", "faktura"):
+            field = model_class._meta.get_field(field_name)
+            choices = []
+            for value, label in field.flatchoices:
+                if value in ("", None):
+                    continue
+                if str(value) == str(label):
+                    choices.append(str(value))
+                else:
+                    choices.append(f"{value} ({label})")
+            lines.append(f"- {field_name}: " + "; ".join(choices))
+        return "\n".join(lines)
 
     def _resolve_report_path(self, report_value):
         path = Path(report_value)
@@ -444,9 +522,27 @@ class Command(BaseCommand):
         for value, label in field.flatchoices:
             if value in ("", None):
                 continue
-            choice_map[str(value).strip().casefold()] = value
-            choice_map[str(label).strip().casefold()] = value
-        return choice_map.get(candidate.strip().casefold())
+            choice_map[self._normalize_choice_key(value)] = value
+            choice_map[self._normalize_choice_key(label)] = value
+
+        for key in self._candidate_choice_keys(candidate):
+            matched = choice_map.get(key)
+            if matched is not None:
+                return matched
+        return None
+
+    def _candidate_choice_keys(self, candidate):
+        key = self._normalize_choice_key(candidate)
+        keys = [key]
+        alias = CHOICE_ALIASES.get(key)
+        if alias:
+            keys.append(self._normalize_choice_key(alias))
+        return keys
+
+    @staticmethod
+    def _normalize_choice_key(value):
+        text = str(value).strip().casefold().replace("ё", "е")
+        return re.sub(r"[^0-9a-zа-я]+", "", text)
 
     def _iter_concrete_subclasses(self, base_class):
         for subclass in base_class.__subclasses__():

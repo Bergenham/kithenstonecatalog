@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'basic_page.middleware.SEOHeadersMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -133,6 +134,18 @@ STATICFILES_DIRS = [
    os.path.join(BASE_DIR, "static"),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+SEO_SITE_NAME = os.getenv('SEO_SITE_NAME', 'Maker Stone')
+SEO_SITE_URL = os.getenv('SEO_SITE_URL', 'https://makerstone.ru')
+SEO_REGION = os.getenv('SEO_REGION', 'Москва и Московская область')
+SEO_PHONE = os.getenv('SEO_PHONE', '+7 985 967-11-88')
+SEO_DEFAULT_OG_IMAGE = os.getenv('SEO_DEFAULT_OG_IMAGE', '/static/images/logo.png')
+SEO_DEFAULT_DESCRIPTION = os.getenv(
+    'SEO_DEFAULT_DESCRIPTION',
+    'Maker Stone изготавливает столешницы, подоконники, панели, барные стойки '
+    'и другие интерьерные изделия из кварцевого, акрилового, натурального '
+    'камня и керамики в Москве и Московской области.'
+)
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

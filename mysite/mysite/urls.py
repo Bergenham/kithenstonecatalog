@@ -20,8 +20,11 @@ from django.conf.urls.static import static
 from django.conf import settings
 import os
 from .settings import DEBUG, MEDIA_URL, MEDIA_ROOT
+from basic_page.seo_views import robots_txt, sitemap_xml
 
 urlpatterns = [
+    path('robots.txt', robots_txt, name='robots_txt'),
+    path('sitemap.xml', sitemap_xml, name='sitemap_xml'),
     path('admin/', admin.site.urls),
     path('catalog/', include('catalog.urls')),
     path('', include('basic_page.urls')),

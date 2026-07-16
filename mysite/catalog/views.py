@@ -8,6 +8,7 @@ from django.http import HttpResponseNotFound
 from django.core.paginator import Paginator
 from django.template.loader import render_to_string
 from django.db.models import Count
+from basic_page.seo import catalog_seo_context, stone_seo_context
 
 def custom_404_view(request, exception):
     return HttpResponseNotFound(render(request, 'fronttemp/404.html'))
@@ -45,6 +46,7 @@ def stone_detail_q(request, article_get=None):
     return render(request, 'fronttemp/quartz/about_quartz.html', {
         'stone': stone,
         'img_m': images,
+        **stone_seo_context(stone, 'quartz'),
     })
 
 def stone_detail_c(request, article_get=None):
@@ -77,9 +79,10 @@ def stone_detail_c(request, article_get=None):
 
         return JsonResponse(response_data)
 
-    return render(request, 'fronttemp/ceramic/about_ceramic.html', {
+    return render(request, 'fronttemp/ceramic/about_ceraimic.html', {
         'stone': stone,
         'img_m': images,
+        **stone_seo_context(stone, 'ceramic'),
     })
 
 def stone_detail_a(request, article_get=None):
@@ -115,6 +118,7 @@ def stone_detail_a(request, article_get=None):
     return render(request, 'fronttemp/acril/about_acril.html', {
         'stone': stone,
         'img_m': images,
+        **stone_seo_context(stone, 'acryl'),
     })
 
 def stone_detail_n(request, article_get=None):
@@ -150,6 +154,7 @@ def stone_detail_n(request, article_get=None):
     return render(request, 'fronttemp/natural/about_natural.html', {
         'stone': stone,
         'img_m': images,
+        **stone_seo_context(stone, 'natural'),
     })
 
 class QuartzCatalog(ListView):
@@ -157,12 +162,14 @@ class QuartzCatalog(ListView):
     context_object_name = 'stones'
     ordering = ['name_stone']
     paginate_by = None
+    catalog_key = 'quartz'
 
     PAGE_SIZE = 20  # количество элементов на страницу
 
     def get_queryset(self):
         queryset = QuartzStone.objects.filter(archive=False).only(
             'name_stone',
+            'article',
             'priview_img',
             'brand_stone',
             'color',
@@ -213,6 +220,7 @@ class QuartzCatalog(ListView):
         context['faktura_options'] = list(
             stones_qs.order_by('faktura').values_list('faktura', flat=True).distinct()
         )
+        context.update(catalog_seo_context(self.request, self.catalog_key))
 
         return context
 
@@ -250,12 +258,14 @@ class CeramicCatalog(ListView):
     context_object_name = 'stones'
     ordering = ['name_stone']
     paginate_by = None
+    catalog_key = 'ceramic'
 
     PAGE_SIZE = 20  # количество элементов на страницу
 
     def get_queryset(self):
         queryset = CeramicsStone.objects.filter(archive=False).only(
             'name_stone',
+            'article',
             'priview_img',
             'brand_stone',
             'color',
@@ -306,6 +316,7 @@ class CeramicCatalog(ListView):
         context['faktura_options'] = list(
             stones_qs.order_by('faktura').values_list('faktura', flat=True).distinct()
         )
+        context.update(catalog_seo_context(self.request, self.catalog_key))
 
         return context
 
@@ -342,12 +353,14 @@ class NaturalCatalog(ListView):
     context_object_name = 'stones'
     ordering = ['name_stone']
     paginate_by = None
+    catalog_key = 'natural'
 
     PAGE_SIZE = 20  # количество элементов на страницу
 
     def get_queryset(self):
         queryset = NaturalStone.objects.filter(archive=False).only(
             'name_stone',
+            'article',
             'priview_img',
             'brand_stone',
             'color',
@@ -398,6 +411,7 @@ class NaturalCatalog(ListView):
         context['faktura_options'] = list(
             stones_qs.order_by('faktura').values_list('faktura', flat=True).distinct()
         )
+        context.update(catalog_seo_context(self.request, self.catalog_key))
 
         return context
 
@@ -434,12 +448,14 @@ class AcrilCatalog(ListView):
     context_object_name = 'stones'
     ordering = ['name_stone']
     paginate_by = None
+    catalog_key = 'acryl'
 
     PAGE_SIZE = 20  # количество элементов на страницу
 
     def get_queryset(self):
         queryset = AcrylicStone.objects.filter(archive=False).only(
             'name_stone',
+            'article',
             'priview_img',
             'brand_stone',
             'color',
@@ -490,6 +506,7 @@ class AcrilCatalog(ListView):
         context['faktura_options'] = list(
             stones_qs.order_by('faktura').values_list('faktura', flat=True).distinct()
         )
+        context.update(catalog_seo_context(self.request, self.catalog_key))
 
         return context
 
