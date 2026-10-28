@@ -377,9 +377,10 @@ class Command(BaseCommand):
                     raw_value = self._normalize_ai_value(ai_json.get(field_name))
                     if not raw_value:
                         continue
+                    raw_value = self._normalize_field_value(field_name, raw_value)
                     matched_value = self._match_choice_value(model_class, field_name, raw_value)
                     if matched_value is not None:
-                        changed_fields[field_name] = matched_value
+                        changed_fields[field_name] = self._normalize_field_value(field_name, matched_value)
                     else:
                         unknown_fields[field_name] = raw_value
 
@@ -515,6 +516,13 @@ class Command(BaseCommand):
             value = value.strip()
             return value or None
         return str(value).strip() or None
+
+    @staticmethod
+    def _normalize_field_value(field_name, value):
+        if field_name != "color" or not value:
+            return value
+        value = str(value).strip()
+        return value[:1].upper() + value[1:]
 
     def _match_choice_value(self, model_class, field_name, candidate):
         field = model_class._meta.get_field(field_name)

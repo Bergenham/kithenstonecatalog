@@ -1,17 +1,44 @@
-from django.core.exceptions import ValidationError
+import logging
+
 from django.views.generic import ListView
 from .models import QuartzStone, StoneImage, CeramicsStone, AcrylicStone, NaturalStone
 from django.shortcuts import render, get_object_or_404, redirect, reverse, HttpResponse
 from django.http import JsonResponse
-from basic_page.models import UserBidModel
+from basic_page.forms import UserBidForm
 from django.http import HttpResponseNotFound
 from django.core.paginator import Paginator
 from django.template.loader import render_to_string
 from django.db.models import Count
 from basic_page.seo import catalog_seo_context, stone_seo_context
 
+
+logger = logging.getLogger(__name__)
+
 def custom_404_view(request, exception):
     return HttpResponseNotFound(render(request, 'fronttemp/404.html'))
+
+
+def _save_user_bid_response(request):
+    form = UserBidForm(request.POST)
+    if not form.is_valid():
+        return JsonResponse(
+            {
+                'status': 'error',
+                'message': 'Проверьте заполнение формы.',
+                'errors': form.errors.get_json_data(),
+            },
+            status=400,
+        )
+
+    try:
+        form.save()
+    except Exception:
+        logger.exception('Failed to save a user bid')
+        return JsonResponse(
+            {'status': 'error', 'message': 'Не удалось отправить заявку. Попробуйте позже.'},
+            status=500,
+        )
+    return JsonResponse({'status': 'success'})
 
 def stone_detail_q(request, article_get=None):
     if article_get:
@@ -21,27 +48,7 @@ def stone_detail_q(request, article_get=None):
         return redirect(reverse("basic_page:main"))
 
     if request.method == 'POST':
-        response_data = {'status': 'error', 'message': ''}
-
-        try:
-            full_name = request.POST.get('full_name', '').strip()
-            phone = request.POST.get('phone', '').strip()
-            email = request.POST.get('email', '').strip()
-
-
-            UserBidModel.objects.create(
-                full_name=full_name,
-                phone=phone,
-                email=email,
-            )
-            response_data = {'status': 'success'}
-
-        except ValidationError as e:
-            response_data['message'] = str(e)
-        except Exception as e:
-            response_data['message'] = "Ошибка сервера: " + str(e)
-
-        return JsonResponse(response_data)
+        return _save_user_bid_response(request)
 
     return render(request, 'fronttemp/quartz/about_quartz.html', {
         'stone': stone,
@@ -57,27 +64,7 @@ def stone_detail_c(request, article_get=None):
         return redirect(reverse("basic_page:main"))
 
     if request.method == 'POST':
-        response_data = {'status': 'error', 'message': ''}
-
-        try:
-            full_name = request.POST.get('full_name', '').strip()
-            phone = request.POST.get('phone', '').strip()
-            email = request.POST.get('email', '').strip()
-
-
-            UserBidModel.objects.create(
-                full_name=full_name,
-                phone=phone,
-                email=email,
-            )
-            response_data = {'status': 'success'}
-
-        except ValidationError as e:
-            response_data['message'] = str(e)
-        except Exception as e:
-            response_data['message'] = "Ошибка сервера: " + str(e)
-
-        return JsonResponse(response_data)
+        return _save_user_bid_response(request)
 
     return render(request, 'fronttemp/ceramic/about_ceraimic.html', {
         'stone': stone,
@@ -93,27 +80,7 @@ def stone_detail_a(request, article_get=None):
         return redirect(reverse("basic_page:main"))
 
     if request.method == 'POST':
-        response_data = {'status': 'error', 'message': ''}
-
-        try:
-            full_name = request.POST.get('full_name', '').strip()
-            phone = request.POST.get('phone', '').strip()
-            email = request.POST.get('email', '').strip()
-
-
-            UserBidModel.objects.create(
-                full_name=full_name,
-                phone=phone,
-                email=email,
-            )
-            response_data = {'status': 'success'}
-
-        except ValidationError as e:
-            response_data['message'] = str(e)
-        except Exception as e:
-            response_data['message'] = "Ошибка сервера: " + str(e)
-
-        return JsonResponse(response_data)
+        return _save_user_bid_response(request)
 
     return render(request, 'fronttemp/acril/about_acril.html', {
         'stone': stone,
@@ -129,27 +96,7 @@ def stone_detail_n(request, article_get=None):
         return redirect(reverse("basic_page:main"))
 
     if request.method == 'POST':
-        response_data = {'status': 'error', 'message': ''}
-
-        try:
-            full_name = request.POST.get('full_name', '').strip()
-            phone = request.POST.get('phone', '').strip()
-            email = request.POST.get('email', '').strip()
-
-
-            UserBidModel.objects.create(
-                full_name=full_name,
-                phone=phone,
-                email=email,
-            )
-            response_data = {'status': 'success'}
-
-        except ValidationError as e:
-            response_data['message'] = str(e)
-        except Exception as e:
-            response_data['message'] = "Ошибка сервера: " + str(e)
-
-        return JsonResponse(response_data)
+        return _save_user_bid_response(request)
 
     return render(request, 'fronttemp/natural/about_natural.html', {
         'stone': stone,
@@ -247,7 +194,7 @@ class QuartzCatalog(ListView):
         context['page_size'] = self.PAGE_SIZE
 
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            html = render_to_string('fronttemp/quartz/_stones_grid_Q.html ', context, request=request)
+            html = render_to_string('fronttemp/quartz/_stones_grid_Q.html', context, request=request)
             return JsonResponse({'html': html, 'total': total_count, 'offset': offset})
 
         return self.render_to_response(context)

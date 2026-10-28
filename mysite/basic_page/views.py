@@ -1,10 +1,9 @@
 from django.contrib.admin.views.decorators import staff_member_required
-from django.core.exceptions import ValidationError
 from django.http import JsonResponse, HttpResponse
 # from .mixins import AdminDashboard
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
-from .models import UserBidModel
+from .forms import UserBidForm
 from catalog.models import QuartzStone, AcrylicStone, NaturalStone, CeramicsStone
 from .utils.table_export import export_stones, export_userbids
 
@@ -84,21 +83,33 @@ class SelectionStonePageTemplate(TemplateView):
     template_name = 'basic_page/front/page45643781.html'
 
 
+def _save_user_bid(request):
+    form = UserBidForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return None
+    return form
+
+
+def _form_errors_response(form):
+    return JsonResponse(
+        {
+            'status': 'error',
+            'message': 'Проверьте заполнение формы.',
+            'errors': form.errors.get_json_data(),
+        },
+        status=400,
+    )
 def choice_stone(request):
     if request.method == 'POST':
-        full_name = request.POST.get('full_name')
-        phone = request.POST.get('phone')
-        email = request.POST.get('email')
-
-        bid = UserBidModel(
-            full_name=full_name,
-            phone=phone,
-            email=email,
-            AWtPP=True  # Согласие с политикой
-        )
-        bid.save()
+        form = _save_user_bid(request)
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            if form is None:
+                return JsonResponse({'status': 'success'})
+            return _form_errors_response(form)
+        if form is not None:
+            return render(request, 'basic_page/front/page45107597.html', {'form': form}, status=400)
     return render(request, 'basic_page/front/page45107597.html')
-
 class TrendsStonePageTemplate(TemplateView):
     template_name = 'basic_page/front/page45068325.html'
 
@@ -107,20 +118,15 @@ class SendUsPageTemplate(TemplateView):
 
 def contacts(request):
     if request.method == 'POST':
-        full_name = request.POST.get('full_name')
-        phone = request.POST.get('phone')
-        email = request.POST.get('email')
-
-        bid = UserBidModel(
-            full_name=full_name,
-            phone=phone,
-            email=email,
-            AWtPP=True  # Согласие с политикой
-        )
-        bid.save()
+        form = _save_user_bid(request)
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            if form is None:
+                return JsonResponse({'status': 'success'})
+            return _form_errors_response(form)
+        if form is not None:
+            return render(request, 'basic_page/contacts.html', {'form': form}, status=400)
 
     return render(request, 'basic_page/contacts.html')
-
 @staff_member_required
 def export_quartz_view(request):
     return export_stones(request, QuartzStone, 'quartz_stones', 'Кварцевые камни')
@@ -137,8 +143,9 @@ def export_natural_view(request):
 def export_ceramics_view(request):
     return export_stones(request, CeramicsStone, 'ceramics_stones', 'Керамические камни')
 
+@staff_member_required
 def export_userbids_view(request):
-    wb = export_userbids()
+    wb = export_userbids(request)
 
     response = HttpResponse(
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

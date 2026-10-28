@@ -1827,7 +1827,7 @@
 
                 <div class="form-group">
                     <label for="full_name">ФИО</label>
-                    <input type="text" id="full_name" name="full_name" class="form-control"
+                    <input type="text" id="full_name" name="full_name" class="form-control" minlength="3"
                            placeholder="Введите ваше полное имя" required>
                     <div class="invalid-feedback" id="fullNameError"
                          style="display: none; color: #dc3545; margin-top: 5px; font-size: 0.9rem;"></div>
@@ -1947,7 +1947,7 @@
         </div>
         <div class="ms-footer-copyright">
             <div class="ms-footer-section"><a href="{% url 'basic_page:main_page' %}"
-                                              style="text-decoration: none; color: inherit;">© 2017-2025, MAKER
+                                              style="text-decoration: none; color: inherit;">© 2017-{% now "Y" %}, MAKER
                 STONE</a></div>
         </div>
     </footer>
@@ -1975,6 +1975,11 @@
     // Обработчик формы
     document.getElementById('contactForm').addEventListener('submit', function(e) {
         e.preventDefault();
+
+        if (!this.checkValidity()) {
+            this.reportValidity();
+            return;
+        }
 
         let isValid = true;
 

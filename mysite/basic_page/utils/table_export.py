@@ -4,6 +4,13 @@ from catalog.models import QuartzStone, AcrylicStone, NaturalStone, CeramicsSton
 from ..models import  UserBidModel
 
 
+def safe_spreadsheet_value(value):
+    """Prevent Excel from interpreting user-controlled strings as formulas."""
+    if isinstance(value, str) and value.startswith(("=", "+", "-", "@")):
+        return f"'{value}"
+    return value
+
+
 def export_stones(request, model, filename, title):
     items = model.objects.all()
 
@@ -30,19 +37,19 @@ def export_stones(request, model, filename, title):
 
     for item in items:
         ws.append([
-            item.name_stone,
+            safe_spreadsheet_value(item.name_stone),
             item.abt_prise,
             item.get_material_display(),
             item.get_country_display(),
             item.thickness,
-            item.article,
-            item.about_brand,
+            safe_spreadsheet_value(item.article),
+            safe_spreadsheet_value(item.about_brand),
             'Да' if item.archive else 'Нет',
             item.get_brand_stone_display(),
             item.get_color_display(),
             item.get_texture_display(),
             item.get_faktura_display(),
-            item.get_link_serf_display(),
+            safe_spreadsheet_value(item.get_link_serf_display()),
         ])
 
     response = HttpResponse(
@@ -73,9 +80,9 @@ def export_userbids(request):
 
     for bid in bids:
         ws.append([
-            bid.full_name,
-            bid.phone,
-            bid.email,
+            safe_spreadsheet_value(bid.full_name),
+            safe_spreadsheet_value(bid.phone),
+            safe_spreadsheet_value(bid.email),
             'Активен' if bid.is_active else 'Неактивен',
             'Да' if bid.AWtPP else 'Нет',
             bid.created_at.strftime("%d.%m.%Y %H:%M")

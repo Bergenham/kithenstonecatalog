@@ -25,6 +25,8 @@ class Stone(models.Model):
     class CountryChoices(models.TextChoices):
         CZECH = 'Чехия', 'Чехия'
         ISRAEL = 'Израиль', 'Израиль'
+        USA = 'США', 'США'
+        RUSSIA = 'Россия', 'Россия'
         SOUTH_KOREA = 'Южная Корея', 'Южная Корея'
         CHINA = 'Китай', 'Китай'
 
@@ -83,6 +85,14 @@ class Stone(models.Model):
 
 
 class StoneImage(models.Model):
+    import_id = models.CharField(
+        max_length=100,
+        unique=True,
+        null=True,
+        blank=True,
+        editable=False,
+        verbose_name='Идентификатор пакетного импорта',
+    )
     stone = models.ForeignKey(
         Stone,
         on_delete=models.CASCADE,
@@ -107,6 +117,12 @@ class QuartzStone(Stone):
         CAESARSTONE = 'Caesarstone'
         TECHNISTONE = 'Technistone'
         PRIMAX_QUARTZ = 'PrimaxQuartz'
+        PRIMAX = 'Primax'
+        AVARUS = 'AVARUS', 'AVARUS'
+        AVANT = 'AVANT', 'AVANT'
+        ETNAQUARTZ = 'ETNAQUARTZ', 'ETNAQUARTZ'
+        WSP = 'WSP', 'WSP'
+        NOBLLE = 'NOBLLE', 'NOBLLE'
 
     class ColorChoices(models.TextChoices):
         BEIGE = 'Бежевый', 'Бежевый'
@@ -126,6 +142,7 @@ class QuartzStone(Stone):
         TERRAZZO = 'Терраццо', 'Терраццо'
         PRIMAX_QUARTZ = 'Праймакс Кварц', 'Праймакс Кварц'
         PRIMAX_QUARTZ_FRESCO = 'Праймакс Кварц Фреско', 'Праймакс Кварц Фреско'
+        MARMARNAYA = "Мармарная", "Мармарная"
 
     class FakturaChoices(models.TextChoices):
         HONED = 'Матовая', 'Матовая'
@@ -137,6 +154,11 @@ class QuartzStone(Stone):
         CAESARSTONE = 'https://drive.google.com/drive/folders/1YgXlFi8KKDzPHz5IheKJlbepOqd1sl3M', 'Caesarstone'
         TECHNISTONE = 'https://technistone.ru/info/certificates/', 'Technistone'
         PRIMAX = 'https://primax.pro/catalog/acryl/certificates/', 'Primax'
+        AVARUS = 'https://interstone.su/stones/kvarcevyy-kamen/avarus-nash-kvarc/certificates', 'Avarus'
+        AVANT = 'https://avant-quartz.com/downloads/', 'Avant'
+        ETNAQUARTZ = 'https://etnaquartz.ru/media/cto-nado-znat-o-produkcii-i-uslugax-kompanii-etna-quartz/', 'EtnaQuartz'
+        WSP = 'https://wspstone.ru/', 'WSP'
+        NOBLLE = 'https://interstone.uz/stones/kvarcevyy-kamen/noblle/certificates', 'Noblle'
 
     brand_stone = models.CharField(
         max_length=50,
@@ -183,6 +205,9 @@ class AcrylicStone(Stone):
         HANEX = 'Hanex'
         DURASEIN = 'Durasein'
         PRIMAX = 'Primax'
+        GRANDEX = 'GRANDEX', 'GRANDEX'
+        NEOMARM = 'NEOMARM', 'NEOMARM'
+        FORMAX = 'FORMAX', 'FORMAX'
 
     class ColorChoices(models.TextChoices):
         BEIGE = 'Бежевый', 'Бежевый'
@@ -220,11 +245,16 @@ class AcrylicStone(Stone):
     class FakturaChoices(models.TextChoices):
         SILKY = 'silky', 'Шелковистая'
         PEARL = 'pearl', 'Жемчужная'
+        PEARL_ZHEMCHUZHNAYA = "pearl (Жемчужная)", "pearl (Жемчужная)"
+        SILKY_SHELKOVISTAYA = "silky (Шелковистая)", "silky (Шелковистая)"
 
     class LinkSerfChoices(models.TextChoices):
         HANEX = 'https://ssd.su/upload/iblock/74f/3hlh6ielnui9v0yw53ua78vqy1iikpdp.zip', 'Сертификат Hanex(ССД)'
         DURASEIN = 'https://ssd.su/upload/iblock/a62/2n2gdb8s43pfs2bqjt7g6wdwdx0vwvcf.zip', 'Сертификат Durasein(ССД)'
         PRIMAX = 'https://primax.pro/catalog/acryl/certificates/', 'Primax'
+        GRANDEX = 'https://topovi.com.ua/ru/stones/akrilovyy-kamen/grandex/certificates', 'Grandex'
+        NEOMARM = 'https://interstone.kz/stones/akrilovyy-kamen/neomarm/certificates', 'Neomarm'
+        FORMAX = 'https://interstone.su/stones/akrilovyy-kamen/formax/certificates', 'Formax'
 
     brand_stone = models.CharField(
         max_length=50,
@@ -335,10 +365,16 @@ class CeramicsStone(Stone):
     class BrandStoneChoices(models.TextChoices):
         CERAM_PRO = 'ceram_p', 'CeramPro'
         TILE_MASTER = 'tile_m', 'TileMaster'
+        TECHGRES = 'TECHGRES', 'TECHGRES'
 
     class ColorChoices(models.TextChoices):
         GRAPHITE = 'graphite', 'Графитовый'
         IVORY = 'ivory', 'Слоновая кость'
+        SERYY = "серый", "серый"
+        ABSOLYUTNYY_CHERNYY = "Абсолютный черный", "Абсолютный черный"
+        CHERNYY = "Черный", "Черный"
+        PESOCHNYY = "Песочный", "Песочный"
+        TEMNO_SERYY = "Темно-серый", "Темно-серый"
 
     class TextureChoices(models.TextChoices):
         GEOMETRIC = 'geometric', 'Геометрическая'
@@ -351,6 +387,7 @@ class CeramicsStone(Stone):
     class LinkSerfChoices(models.TextChoices):
         CERAM_CERT = 'ceram_cert.pdf', 'Сертификат керамики'
         HEAT_RESIST = 'heat_res.pdf', 'Термостойкость'
+        TECHGRES = 'https://interstone.su/stones/shirokoformatnye-keramicheskie-plity/techgres/certificates', 'TechGres'
 
     brand_stone = models.CharField(
         max_length=50,
@@ -381,7 +418,7 @@ class CeramicsStone(Stone):
         blank=True,
     )
     link_serf = models.CharField(
-        max_length=50,
+        max_length=200,
         choices=LinkSerfChoices.choices,
         verbose_name='Ссылка на сертификаты',
         null=True,

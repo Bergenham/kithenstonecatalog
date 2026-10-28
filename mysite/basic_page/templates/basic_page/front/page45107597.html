@@ -758,7 +758,7 @@ t_onReady(function() {t_onFuncLoad('t_menuburger_init',function(){t_menuburger_i
                                     </svg>
                                 </a></li><!-- /new soclinks --> </ul>
                         </div>
-                        <div class="t451m__right_descr t-descr t-descr_xs" field="descr">Maker Stone © 2024</div>
+                        <div class="t451m__right_descr t-descr t-descr_xs" field="descr">Maker Stone © {% now "Y" %}</div>
                     </div>
                 </div>
             </div>
@@ -1486,12 +1486,12 @@ rec.setAttribute('data-animationappear','off');rec.style.opacity=1;t_onFuncLoad(
                                 <div class="form-section" >
                                     <h2 class="form-title">Сделать заявку</h2>
                                     <div class="form-container">
-                                        <form id="contactForm" method="post" onsubmit="submitForm(event)">
+                                        <form id="contactForm" method="post">
                                             {% csrf_token %}
 
                                             <div class="form-group">
                                                 <label for="full_name">ФИО</label>
-                                                <input type="text" id="full_name" name="full_name" class="form-control"
+                                                <input type="text" id="full_name" name="full_name" class="form-control" minlength="3"
                                                        placeholder="Введите ваше полное имя" required>
                                                 <div class="invalid-feedback" id="fullNameError"></div>
                                             </div>
@@ -1960,37 +1960,15 @@ rec.setAttribute('data-animationappear','off');rec.style.opacity=1;t_onFuncLoad(
                                 </style>
 
                                 <!-- Скрипт для формы -->
-                                <script>
-
-function submitForm(event) {
-    // 1. Предотвращаем перезагрузку страницы
-    event.preventDefault();
-
-    // 2. Отправляем данные формы
-    const form = event.target;
-    const formData = new FormData(form);
-
-    // 3. Отправка на сервер
-    fetch("", {  // Отправляем на текущий URL
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}'  // CSRF защита
-        }
-    })
-    .then(response => {
-        // 4. После успешной отправки скрываем форму и показываем сообщение
-        if (response.ok) {
-            form.style.display = 'none';
-            document.querySelector('.success-message').style.display = 'block';
-        }
-    })
-    .catch(error => console.error('Ошибка:', error));
-}
-
+<script>
                                     // Обработчик формы
                                     document.getElementById('contactForm').addEventListener('submit', function(e) {
                                         e.preventDefault();
+
+                                        if (!this.checkValidity()) {
+                                            this.reportValidity();
+                                            return;
+                                        }
 
                                         let isValid = true;
 
@@ -2041,15 +2019,36 @@ function submitForm(event) {
                                             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Отправка...</span>';
                                             submitBtn.disabled = true;
 
-                                            // Имитация отправки (в реальном проекте будет fetch)
-                                            setTimeout(() => {
+                                            // Отправка заявки на сервер
+                                            fetch(window.location.pathname, {
+                                                method: 'POST',
+                                                body: formData,
+                                                headers: {
+                                                    'X-CSRFToken': '{{ csrf_token }}',
+                                                    'X-Requested-With': 'XMLHttpRequest'
+                                                }
+                                            })
+                                            .then(response => {
+                                                if (!response.ok) {
+                                                    throw new Error('Request failed');
+                                                }
+                                                return response.json();
+                                            })
+                                            .then(data => {
+                                                if (data.status !== 'success') {
+                                                    throw new Error('Request was rejected');
+                                                }
                                                 document.getElementById('contactForm').style.display = 'none';
                                                 document.getElementById('successMessage').style.display = 'block';
 
                                                 // Восстановление кнопки
                                                 submitBtn.innerHTML = '<span>Отправить</span><i class="fas fa-paper-plane"></i>';
                                                 submitBtn.disabled = false;
-                                            }, 1500);
+                                            })
+                                            .catch(() => {
+                                                submitBtn.innerHTML = '<span>Отправить</span><i class="fas fa-paper-plane"></i>';
+                                                submitBtn.disabled = false;
+                                            });
                                         }
                                     });
 
@@ -2129,7 +2128,7 @@ function submitForm(event) {
                      data-field-left-res-640-value="170" data-field-width-res-640-value="300"
                      data-field-container-res-640-value="grid" data-field-top-res-960-value="24"
                      data-field-left-res-960-value="40" data-field-width-res-960-value="220">
-                    <div class='tn-atom' field='tn_text_1475143840125'>© 2017-2024, MAKER STONE</div>
+                    <div class='tn-atom' field='tn_text_1475143840125'>© 2017-{% now "Y" %}, MAKER STONE</div>
                 </div>
                 <div
                         class="t396__group tn-group tn-group__744453610171487935041250120" data-fields="top,left"
@@ -2210,7 +2209,7 @@ function submitForm(event) {
                 <div class="t389__content">
                     <div class="t389__col t389__col_hiddenmobile">
                         <div class="t389__typo t389__copyright t-name t-name_xs" field="text">
-                            © 2017-2024, MAKER STONE
+                            © 2017-{% now "Y" %}, MAKER STONE
                         </div>
                     </div>
                     <div class="t389__col t389__col_center t-align_center">
@@ -2240,7 +2239,7 @@ function submitForm(event) {
                     </div>
                     <div class="t389__col t389__col_mobile">
                         <div class="t389__typo t389__copyright t-name t-name_xs" field="text">
-                            © 2017-2024, MAKER STONE
+                            © 2017-{% now "Y" %}, MAKER STONE
                         </div>
                     </div>
                     <div class="t389__col">
