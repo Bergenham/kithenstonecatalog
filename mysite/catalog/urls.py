@@ -13,5 +13,3 @@ urlpatterns = [
     path('natural/stone/<str:article_get>', stone_detail_n, name='stone_detail_n'),
     path('ceramic/stone/<str:article_get>', stone_detail_c, name='stone_detail_c'),
 ]
-
-handler404 = 'myapp.views.custom_404_view'

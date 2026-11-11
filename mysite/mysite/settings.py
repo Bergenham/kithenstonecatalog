@@ -12,22 +12,40 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-from django.conf.global_settings import MEDIA_URL
+from django.core.exceptions import ImproperlyConfigured
+
+from .env import env_bool, env_list, env_nonnegative_int, load_env, required_env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_env(BASE_DIR.parent / '.env')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-yr^)w3n6(orsgzxk&!ll62&@b%y36s@grv$v^9g2#9y=mqyvy2'
+SECRET_KEY = required_env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env_bool('DEBUG', False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env_list('ALLOWED_HOSTS')
+CSRF_TRUSTED_ORIGINS = env_list('CSRF_TRUSTED_ORIGINS')
+if not DEBUG and not ALLOWED_HOSTS:
+    raise ImproperlyConfigured('Для DEBUG=False задайте ALLOWED_HOSTS в .env.')
+
+SECURE_SSL_REDIRECT = env_bool('SECURE_SSL_REDIRECT', not DEBUG)
+SESSION_COOKIE_SECURE = env_bool('SESSION_COOKIE_SECURE', not DEBUG)
+CSRF_COOKIE_SECURE = env_bool('CSRF_COOKIE_SECURE', not DEBUG)
+SECURE_HSTS_SECONDS = env_nonnegative_int('SECURE_HSTS_SECONDS')
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool('SECURE_HSTS_INCLUDE_SUBDOMAINS')
+SECURE_HSTS_PRELOAD = env_bool('SECURE_HSTS_PRELOAD')
+# Enable only behind a trusted proxy which replaces this header, and keep
+# Gunicorn inaccessible from the public network (see deploy/nginx.conf.example).
+if env_bool('TRUST_PROXY_HEADERS'):
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
@@ -82,11 +100,11 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'stone_maker_db',
-        'USER': 'user_db',
-        'PASSWORD': 'CRsK%~k|@jEX',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': required_env('DB_NAME'),
+        'USER': required_env('DB_USER'),
+        'PASSWORD': required_env('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -125,15 +143,35 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.getenv('MEDIA_ROOT', str(BASE_DIR / 'media'))
 
 STATICFILES_DIRS = [
    os.path.join(BASE_DIR, "static"),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Keep the exported Tilda URLs while collecting their assets for Nginx.
+# Only assets are included, never HTML templates, Python, or .env files.
+for prefix, asset_root in [
+    ('basic', BASE_DIR / 'basic_page/templates/basic_page/front'),
+    ('catalog', BASE_DIR / 'catalog/templates/fronttemp'),
+]:
+    for asset_kind in ('css', 'js', 'images'):
+        STATICFILES_DIRS.append((
+            f'legacy/{prefix}/{asset_kind}', str(asset_root / asset_kind),
+        ))
+STATIC_ROOT = os.getenv('STATIC_ROOT', str(BASE_DIR / 'staticfiles'))
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {'console': {'class': 'logging.StreamHandler'}},
+    'root': {'handlers': ['console'], 'level': 'INFO'},
+    'loggers': {
+        'django': {'handlers': ['console'], 'level': 'INFO', 'propagate': False},
+    },
+}
 
 SEO_SITE_NAME = os.getenv('SEO_SITE_NAME', 'Maker Stone')
 SEO_SITE_URL = os.getenv('SEO_SITE_URL', 'https://makerstone.ru')

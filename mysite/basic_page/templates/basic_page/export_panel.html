@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>���������� ������</title>
+    <title>Панель экспорта</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -34,7 +34,7 @@
             overflow: hidden;
         }
 
-        /* ������������ �������� */
+        /* Декоративные элементы */
         .decor {
             position: absolute;
             border-radius: 50%;
@@ -252,7 +252,7 @@
             color: white;
         }
 
-        /* �������� */
+        /* Анимация */
         @keyframes fade-in {
             from {
                 opacity: 0;
@@ -270,7 +270,7 @@
         .card-button:nth-child(4) { animation: fade-in 1.2s forwards; }
         .long-button { animation: fade-in 1.4s forwards; }
 
-        /* ������������ */
+        /* Адаптивная разметка */
         @media (max-width: 900px) {
             .button-grid {
                 grid-template-columns: 1fr;
@@ -325,15 +325,15 @@
 </head>
 <body>
     <div class="container">
-        <!-- ������������ �������� -->
+        <!-- Декоративные элементы -->
         <div class="decor decor-1"></div>
         <div class="decor decor-2"></div>
         <div class="decor decor-3"></div>
 
-        <!-- ��������� -->
+        <!-- Заголовок -->
         <div class="header">
             <h1 class="main-title">EXPORT PANEL</h1>
-            <p class="subtitle">� ���� �������</p>
+            <p class="subtitle">Выгрузка каталогов и заявок</p>
         </div>
 
         <div class="button-grid">
@@ -341,35 +341,35 @@
                 <div class="icon">
                     <i class="fas fa-file-export"></i>
                 </div>
-                ������� ������������ �����
+                Экспорт натурального камня
             </a>
 
             <a href="{% url 'basic_page:export_acrylic_view' %}" class="card-button">
                 <div class="icon">
                     <i class="fas fa-file-export"></i>
                 </div>
-                ������� ���������� �����
+                Экспорт акрилового камня
             </a>
 
             <a href="{% url 'basic_page:export_quartz_view' %}" class="card-button">
                 <div class="icon">
                     <i class="fas fa-file-export"></i>
                 </div>
-                ������� ���������� �����
+                Экспорт кварцевого камня
             </a>
 
             <a href="{% url 'basic_page:export_ceramics_view' %}" class="card-button">
                 <div class="icon">
                     <i class="fas fa-file-export"></i>
                 </div>
-                ������� ��������
+                Экспорт керамики
             </a>
 
             <a href="{% url 'basic_page:export_userbids_view' %}" class="long-button">
                 <div class="icon">
                     <i class="fas fa-file-export"></i>
                 </div>
-                ������� ������
+                Экспорт заявок
             </a>
         </div>
     </div>

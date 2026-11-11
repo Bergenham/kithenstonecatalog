@@ -212,14 +212,14 @@ class CatalogImporter:
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter('error', Image.DecompressionBombWarning)
-                with Image.open(staged) as image:
+                with Image.open(staged, formats=['JPEG', 'PNG', 'WEBP']) as image:
                     if image.format != IMAGE_TYPES[suffix]:
                         raise ValueError('Расширение изображения не соответствует содержимому')
                     if image.width * image.height > MAX_PIXELS or getattr(image, 'is_animated', False):
                         raise ValueError('Изображение превышает 40 мегапикселей или анимировано')
                     image.verify()
                 # verify() alone does not decode all pixel data (e.g. truncated JPEG).
-                with Image.open(staged) as image:
+                with Image.open(staged, formats=['JPEG', 'PNG', 'WEBP']) as image:
                     image.load()
         except (OSError, UnidentifiedImageError, Image.DecompressionBombWarning,
                 Image.DecompressionBombError) as exc:

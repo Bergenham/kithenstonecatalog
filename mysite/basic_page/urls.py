@@ -14,6 +14,7 @@ urlpatterns = [
     path('main_page', HomePageView.as_view(), name='main_page_2'),
     path('topstone', TopstonePageView.as_view(), name='topstone'),
     path('production', ProductionPageView.as_view(), name='production'),
+    path('production', ProductionPageView.as_view(), name='productions'),
     path('delivery', DeliveryPageView.as_view(), name='delivery'),
     path('installation', InstallationPageView.as_view(), name='installation'),
     path('stairs', StairsPageView.as_view(), name='stairs'),

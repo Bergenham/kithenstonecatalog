@@ -19,8 +19,9 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 import os
-from .settings import DEBUG, MEDIA_URL, MEDIA_ROOT
 from basic_page.seo_views import robots_txt, sitemap_xml
+
+handler404 = 'catalog.views.custom_404_view'
 
 urlpatterns = [
     path('robots.txt', robots_txt, name='robots_txt'),
@@ -29,10 +30,10 @@ urlpatterns = [
     path('catalog/', include('catalog.urls')),
     path('', include('basic_page.urls')),
 ]
-if DEBUG:
+if settings.DEBUG:
     # Для обслуживания медиафайлов во время разработки
     from django.conf.urls.static import static
-    urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 #___________for all page(without trend)________
 
 urlpatterns += static(
