@@ -1,0 +1,3 @@
+entity_type,article,name_stone,preview,abt_prise,country,thickness,about_brand,archive,brand_stone,color,texture,faktura
+quartz,DEMO-Q-001,Demo Quartz White,images/entity_001/preview.jpg,12500.00,Чехия,20,Демонстрационная запись пакетного импорта,false,Technistone,Белый,Мраморная,Полированная
+acrylic,DEMO-A-002,Demo Acrylic Grey,images/entity_002/preview.webp,15000.00,Южная Корея,12,Демонстрационная запись пакетного импорта,false,Hanex,Серый,Однотонная,silky

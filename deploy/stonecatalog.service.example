@@ -1,0 +1,25 @@
+# Template only. Create the user/directories and adapt paths before installing.
+[Unit]
+Description=Stone catalog Django (Gunicorn)
+After=network.target
+
+[Service]
+Type=simple
+User=stonecatalog
+Group=www-data
+WorkingDirectory=/srv/kithenstonecatalog/app/mysite
+Environment=PYTHONUNBUFFERED=1
+# The Django settings load /srv/kithenstonecatalog/app/.env themselves.
+ExecStart=/srv/kithenstonecatalog/app/.venv/bin/gunicorn --config ../deploy/gunicorn.conf.py mysite.wsgi:application
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=70
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/srv/kithenstonecatalog/shared/media
+
+[Install]
+WantedBy=multi-user.target

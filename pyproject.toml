@@ -1,16 +1,31 @@
-[tool.poetry]
+[project]
 name = "stonecatalog"
 version = "0.1.0"
 description = "Simple stone catalog with postgres and django(all from django-box)"
-authors = ["Bergenham"]
+authors = [{name = "Bergenham"}]
 readme = "README.md"
+requires-python = ">=3.13,<4.0"
+dynamic = ["dependencies"]
+
+[tool.poetry]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.13"
-django = "^5.1.7"
-pillow = "^11.2.0"
+django = ">=5.2.18,<5.3"
+pillow = ">=13.0.0,<14"
+sqlparse = ">=0.6.0,<0.7"
 psycopg2-binary = "^2.9.10"
 openpyxl = "^3.1.5"
+gunicorn = {version = ">=26.2.0,<27", markers = "sys_platform != 'win32'"}
+
+[tool.poetry.group.parsers]
+optional = true
+
+[tool.poetry.group.parsers.dependencies]
+requests = "^2.32.5"
+beautifulsoup4 = "^4.13"
+selenium = "^4.35"
 
 
 [build-system]

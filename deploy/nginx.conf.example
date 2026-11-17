@@ -1,0 +1,55 @@
+# Nginx virtual host for makerstone.ru. Enable the TLS server only after
+# issuing its certificates. Validate every change with `nginx -t`.
+server {
+    listen 80;
+    server_name makerstone.ru;
+    return 301 https://makerstone.ru$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name makerstone.ru;
+    ssl_certificate /etc/letsencrypt/live/makerstone.ru/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/makerstone.ru/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    server_tokens off;
+    client_max_body_size 25m;
+    add_header X-Content-Type-Options nosniff always;
+
+    location ^~ /static/ {
+        alias /srv/kithenstonecatalog/app/mysite/staticfiles/;
+        access_log off;
+        expires 7d;
+    }
+
+    location ^~ /media/ {
+        alias /srv/kithenstonecatalog/shared/media/;
+        autoindex off;
+    }
+
+    # Preserve exported Tilda URLs, including /trend/hopetoun relative assets.
+    location ~ ^/(?:trend/)?(css|js|images)/(.+)$ {
+        alias /srv/kithenstonecatalog/app/mysite/staticfiles/legacy/basic/$1/$2;
+        access_log off;
+        expires 7d;
+    }
+
+    location ~ ^/catalog/(css|js|images)/(.+)$ {
+        alias /srv/kithenstonecatalog/app/mysite/staticfiles/legacy/catalog/$1/$2;
+        access_log off;
+        expires 7d;
+    }
+
+    location ~ /\.(?!well-known/) {
+        deny all;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 70s;
+    }
+}

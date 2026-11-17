@@ -129,6 +129,8 @@ celerybeat.pid
 
 # Environments
 .env
+.env.*
+!.env.example
 .venv
 env/
 venv/
@@ -178,6 +180,7 @@ media/
 mysite/media/
 uploads/
 storage/
+staticfiles/
 
 # Local databases and dumps
 *.sqlite3

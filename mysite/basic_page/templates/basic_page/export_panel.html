@@ -110,6 +110,31 @@
             z-index: 2;
         }
 
+        .export-format {
+            grid-column: span 2;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 22px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            background: #f8fafc;
+            color: #1e293b;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .export-format select {
+            flex: 1;
+            min-width: 220px;
+            padding: 11px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            background: white;
+            color: #1e293b;
+            font: inherit;
+        }
+
         .card-button {
             background: white;
             border: 2px solid #e2e8f0;
@@ -280,6 +305,10 @@
                 grid-column: span 1;
             }
 
+            .export-format {
+                grid-column: span 1;
+            }
+
             .main-title {
                 font-size: 3.5rem;
             }
@@ -297,6 +326,12 @@
             .card-button, .long-button {
                 font-size: 1.2rem;
                 padding: 30px 15px;
+            }
+
+            .export-format {
+                align-items: stretch;
+                flex-direction: column;
+                gap: 8px;
             }
 
             .card-button .icon {
@@ -337,28 +372,36 @@
         </div>
 
         <div class="button-grid">
-            <a href="{% url 'basic_page:export_natural_view' %}" class="card-button">
+            <label class="export-format" for="export-format">
+                Формат экспорта каталога
+                <select id="export-format" name="export-format">
+                    <option value="standard">XLSX — только данные</option>
+                    <option value="images">XLSX — данные с изображениями</option>
+                </select>
+            </label>
+
+            <a href="{% url 'basic_page:export_natural_view' %}" class="card-button catalog-export">
                 <div class="icon">
                     <i class="fas fa-file-export"></i>
                 </div>
                 Экспорт натурального камня
             </a>
 
-            <a href="{% url 'basic_page:export_acrylic_view' %}" class="card-button">
+            <a href="{% url 'basic_page:export_acrylic_view' %}" class="card-button catalog-export">
                 <div class="icon">
                     <i class="fas fa-file-export"></i>
                 </div>
                 Экспорт акрилового камня
             </a>
 
-            <a href="{% url 'basic_page:export_quartz_view' %}" class="card-button">
+            <a href="{% url 'basic_page:export_quartz_view' %}" class="card-button catalog-export">
                 <div class="icon">
                     <i class="fas fa-file-export"></i>
                 </div>
                 Экспорт кварцевого камня
             </a>
 
-            <a href="{% url 'basic_page:export_ceramics_view' %}" class="card-button">
+            <a href="{% url 'basic_page:export_ceramics_view' %}" class="card-button catalog-export">
                 <div class="icon">
                     <i class="fas fa-file-export"></i>
                 </div>
@@ -373,5 +416,16 @@
             </a>
         </div>
     </div>
+    <script>
+        document.querySelectorAll('.catalog-export').forEach(function (link) {
+            link.addEventListener('click', function () {
+                if (document.getElementById('export-format').value === 'images') {
+                    link.href = link.href.split('?')[0] + '?with_images=1';
+                } else {
+                    link.href = link.href.split('?')[0];
+                }
+            });
+        });
+    </script>
 </body>
 </html>
