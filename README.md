@@ -1,7 +1,7 @@
 # Maker Stone — каталог камня
 
 Django-приложение каталога, страниц услуг, заявок и импорта изображений.
-Python 3.13, Django 5.2 LTS, PostgreSQL. На Linux запускается через Gunicorn/Nginx.
+Python 3.12+, Django 5.2 LTS, PostgreSQL. На Linux запускается через Gunicorn/Nginx.
 
 - [Подготовка к клонированию и VPS](docs/deployment.md).
 - [Формат и запуск пакетного импорта](docs/catalog_import.md).

@@ -4,14 +4,14 @@ version = "0.1.0"
 description = "Simple stone catalog with postgres and django(all from django-box)"
 authors = [{name = "Bergenham"}]
 readme = "README.md"
-requires-python = ">=3.13,<4.0"
+requires-python = ">=3.12,<4.0"
 dynamic = ["dependencies"]
 
 [tool.poetry]
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.13"
+python = "^3.12"
 django = ">=5.2.18,<5.3"
 pillow = ">=13.0.0,<14"
 sqlparse = ">=0.6.0,<0.7"

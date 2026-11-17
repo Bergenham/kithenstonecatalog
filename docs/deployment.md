@@ -108,14 +108,14 @@ includeSubDomains/preload оставлены выключенными. Проч�
 
 ## Первый клон и установка
 
-Нужен Python 3.13 (по pyproject), PostgreSQL версии, совместимой с Django 5.2
+Нужен Python 3.12+ (Ubuntu 24.04 поставляет Python 3.12), PostgreSQL версии, совместимой с Django 5.2
 (14+), Nginx, systemd и доступ GitHub по SSH. Команды ниже — инструкция,
 а не выполненные операции. Каталог и пользователя сначала создают на VPS.
 
 ```sh
 git clone git@github.com:Bergenham/kithenstonecatalog.git /srv/kithenstonecatalog/app
 cd /srv/kithenstonecatalog/app
-python3.13 -m venv .venv
+python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install 'poetry>=2.4,<3'
 poetry install --only main --no-root
@@ -135,7 +135,7 @@ python manage.py collectstatic --noinput
 ## После клонирования: последовательность
 
 1. Создать непривилегированного пользователя, закрыть внешний доступ к PostgreSQL
-   и порту Gunicorn, подготовить Python 3.13 и main-зависимости.
+   и порту Gunicorn, подготовить Python 3.12+ и main-зависимости.
 2. Подготовить новую БД и восстановить резервную копию; сверить количество
    камней, примеров, заявок и пользователей. Не импортировать DEMO-пакет в рабочий
    каталог и не запускать старые парсеры для «воссоздания» существующей БД.
